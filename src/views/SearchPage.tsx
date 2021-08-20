@@ -1,13 +1,14 @@
-import { Card, Container, TextField } from '@material-ui/core'
-import { Formik } from 'formik'
-import * as Yup from 'yup'
-import { TextFieldValidate } from '../components/TextFieldValidate'
+import React from "react";
+import { Card, Container } from "@material-ui/core";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { TextFieldValidate } from "../components/TextFieldValidate";
 
 export function SearchPage() {
   return (
     <Container>
       <Formik
-        initialValues={{ searchTerm: '' }}
+        initialValues={{ searchTerm: "" }}
         onSubmit={() => undefined}
         validationSchema={Yup.object({
           searchTerm: Yup.string()
@@ -26,5 +27,5 @@ export function SearchPage() {
         </Card>
       </Formik>
     </Container>
-  )
+  );
 }

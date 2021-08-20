@@ -1,15 +1,12 @@
-import {
-  FilledInputProps,
-  InputProps,
-  OutlinedInputProps,
-  TextField,
-} from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 import { useField } from 'formik'
+import React from 'react'
 
 interface Props {
   name: string
   label: string
   type?: 'password' | 'text' | 'email'
+  variant?: 'filled' | 'outlined' | 'standard'
   [key: string]: any
 }
 
