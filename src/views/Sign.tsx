@@ -115,10 +115,12 @@ export function Sign({ isSignIn }: Props) {
         validationSchema={yup.object({
           email: yup.string().required().email('Invalid email address'),
           password: yup.string().required().min(8),
-          passwordRepeat: yup.string().required().min(8),
-          firstName: yup.string().required().min(2),
-          secondName: yup.string().required().min(2),
-          biography: yup.string().notRequired().max(240),
+          ...(!isSignIn && {
+            passwordRepeat: yup.string().required().min(8),
+            firstName: yup.string().required().min(2),
+            secondName: yup.string().required().min(2),
+            biography: yup.string().notRequired().max(240),
+          }),
         })}
         onSubmit={isSignIn ? onSignIn : onSignUp}
       >

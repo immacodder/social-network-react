@@ -15,10 +15,10 @@ import { CommentType } from "../types";
 const p: CommentType = {
   authorUid: "test",
   bodyText: "This is a comment, yay",
-  commentUid: "test",
   dislikedBy: [],
   likedBy: [],
   parentPostUid: "test",
+  uid: 'test'
 };
 
 export function Comment() {

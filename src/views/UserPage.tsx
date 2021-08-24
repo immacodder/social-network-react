@@ -7,13 +7,14 @@ import {
   Stack,
   Typography,
 } from '@material-ui/core'
+import { format } from 'date-fns'
 import { CalendarAccount } from 'mdi-material-ui'
 import React from 'react'
 import { useAppSelector } from '../hooks'
 
 export function UserPage() {
   const userInfo = useAppSelector((state) => state.user.userState)
-
+ 
   if (userInfo === 'initializing' || userInfo === 'signed out') {
     console.log('User is initializing or signed out')
     return null
@@ -37,7 +38,7 @@ export function UserPage() {
               <Stack direction="row" gap={1}>
                 <CalendarAccount sx={{ color: 'text.secondary' }} />
                 <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                  2005 May 5th
+                  {format(p.dateOfBirth, `MMMM do yyyy`)}
                 </Typography>
               </Stack>
               {p.biography ? (

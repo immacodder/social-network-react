@@ -23,35 +23,29 @@ import {
   Comment as CommentIcon,
   Share,
 } from 'mdi-material-ui'
-import { PostType } from '../types'
 import { Comment } from './Comment'
 import { TextFieldValidate } from './TextFieldValidate'
 import React, { useState } from 'react'
+import { PostType, UserType } from '../types'
 
-const p: PostType = {
-  authorUid: 'test',
-  title: 'A title',
-  bodyText:
-    "Lorem ipsum hello world I love this thing and I don't know what the heck am I doing",
-  comments: [],
-  createdAt: new Date().getTime(),
-  dislikedBy: [],
-  likedBy: [],
-  imageUrls: [
-    'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8bmF0dXJlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-  ],
-  postUid: 'test',
+interface Props extends PostType {
+  user: UserType
 }
 
-export function Post() {
+export function Post(p: Props) {
   const [isCommenting, setIsCommenting] = useState(false)
+
   return (
     <Container sx={{ mt: 2, mb: 4 }}>
       <Card elevation={4}>
         <CardHeader
           title={<Typography variant="subtitle1">{p.title}</Typography>}
           subheader="Tigran Khachaturian"
-          avatar={<Avatar sx={{ width: 48, height: 48 }}>TK</Avatar>}
+          avatar={
+            <Avatar sx={{ width: 48, height: 48 }} src={p.user.profileImage ?? undefined}>
+              {`${p.user.firstName[0]}${p.user.secondName[0]}`}
+            </Avatar>
+          }
         />
         <CardContent>
           <Typography>{p.bodyText}</Typography>
