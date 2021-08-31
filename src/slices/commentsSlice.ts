@@ -8,9 +8,10 @@ export const commentsSlice = createSlice({
   name: 'comments',
   reducers: {
     setComment(state, { payload }: PayloadAction<CommentType>) {
-      return state.map((v) =>
-        v.uid === payload.uid ? payload : v,
-      )
+      if (state.find((v) => v.uid === payload.uid)) {
+        return state.map((v) => (v.uid === payload.uid ? payload : v))
+      }
+      state.push(payload)
     },
     deleteComment(state, { payload }: PayloadAction<{ uid: string }>) {
       return state.filter((v) => v.uid !== payload.uid)

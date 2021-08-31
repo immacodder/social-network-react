@@ -1,60 +1,68 @@
 import {
-  Box,
-  Avatar,
-  Card,
-  CardContent,
-  Container,
-  Stack,
-  Typography,
+	Box,
+	Avatar,
+	Card,
+	CardContent,
+	Container,
+	Stack,
+	Typography,
 } from '@material-ui/core'
 import { format } from 'date-fns'
 import { CalendarAccount } from 'mdi-material-ui'
 import React from 'react'
+import { Post } from '../components/Post'
 import { useAppSelector } from '../hooks'
+import { PostType } from '../types'
 
-export function UserPage() {
-  const userInfo = useAppSelector((state) => state.user.userState)
- 
-  if (userInfo === 'initializing' || userInfo === 'signed out') {
-    console.log('User is initializing or signed out')
-    return null
-  }
+interface Props {
+	userPosts: PostType[]
+}
+export function UserPage(p: Props) {
+	const user = useAppSelector((state) => state.user.userState)
+	const comments = useAppSelector((s) => s.comments)
+	if (typeof user === 'string') return null
 
-  const p = userInfo
-
-  return (
-    <>
-      <Container>
-        <Card elevation={8}>
-          <CardContent>
-            <Stack sx={{ textAlign: 'center', alignItems: 'center' }} gap={2}>
-              <Avatar
-                sx={{ mx: 'auto', height: '100px', width: '100px' }}
-                src={p.profileImage || undefined}
-              >
-                {p.firstName[0] + p.secondName[0]}
-              </Avatar>
-              <Typography variant="h5">{`${p.firstName} ${p.secondName}`}</Typography>
-              <Stack direction="row" gap={1}>
-                <CalendarAccount sx={{ color: 'text.secondary' }} />
-                <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                  {format(p.dateOfBirth, `MMMM do yyyy`)}
-                </Typography>
-              </Stack>
-              {p.biography ? (
-                <Box>
-                  <Typography variant="h6" sx={{ mb: 1 }}>
-                    About me
-                  </Typography>
-                  <Typography variant="body2">{p.biography}</Typography>
-                </Box>
-              ) : (
-                <Typography>This user prefers to keep it secret</Typography>
-              )}
-            </Stack>
-          </CardContent>
-        </Card>
-      </Container>
-    </>
-  )
+	return (
+		<>
+			<Container>
+				<Card elevation={8}>
+					<CardContent>
+						<Stack sx={{ textAlign: 'center', alignItems: 'center' }} gap={2}>
+							<Avatar
+								sx={{ mx: 'auto', height: '100px', width: '100px' }}
+								src={user.profileImage || undefined}
+							>
+								{user.firstName[0] + user.secondName[0]}
+							</Avatar>
+							<Typography variant="h5">{`${user.firstName} ${user.secondName}`}</Typography>
+							<Stack direction="row" gap={1}>
+								<CalendarAccount sx={{ color: 'text.secondary' }} />
+								<Typography variant="body1" sx={{ color: 'text.secondary' }}>
+									{format(user.dateOfBirth, `MMMM do yyyy`)}
+								</Typography>
+							</Stack>
+							{user.biography ? (
+								<Box>
+									<Typography variant="h6" sx={{ mb: 1 }}>
+										About me
+									</Typography>
+									<Typography variant="body2">{user.biography}</Typography>
+								</Box>
+							) : (
+								<Typography>This user prefers to keep it secret</Typography>
+							)}
+						</Stack>
+					</CardContent>
+				</Card>
+			</Container>
+			{p.userPosts.map((post) => (
+				<Post
+					{...post}
+					key={post.uid}
+					user={user}
+					commentList={comments.filter((v) => v.parentPostUid === post.uid)}
+				/>
+			))}
+		</>
+	)
 }

@@ -6,89 +6,100 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { Home } from './views/Home'
 import { AppBarComponent } from './components/AppBar'
 import { SearchPage } from './views/SearchPage'
-import { UserPage } from './views/UserPage'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import firebase from 'firebase/app'
 import { useAppDispatch, useAppSelector } from './hooks'
-import { setUser } from './slices/userSlice'
 import { CommentType, PostType, UserType } from './types'
 import { setPost } from './slices/postsSlice'
 import { setComment } from './slices/commentsSlice'
+import { fire } from '.'
 import { addUser } from './slices/usersSlice'
+import { addUserUid } from './slices/userListSlice'
+import { UserPage } from './views/UserPage'
+import { UserSettings } from './views/UserSettings'
 
 export function App() {
-  const dispatch = useAppDispatch()
-  const users = useAppSelector((state) => state.users)
+	const dispatch = useAppDispatch()
+	const userList = useAppSelector((s) => s.userList)
+	const users = useAppSelector((s) => s.users)
+	const user = useAppSelector((s) => s.user.userState as UserType)
+	const posts = useAppSelector((s) => s.posts)
 
-  useEffect(() => {
-    const unsubList: Array<() => void> = []
-    const unsub1 = firebase.auth().onAuthStateChanged(async (user) => {
-      if (!user) return dispatch(setUser('signed out'))
+	useEffect(() => {
+		const promises = userList.map(async (uid) => {
+			const userFindResult = users.find((v) => v.uid === uid)
+			if (userFindResult) return
 
-      const { uid } = user
-      const userData = (
-        await firebase.firestore().doc(`users/${uid}`).get()
-      ).data() as UserType
+			const result = await fire.firestore().doc(`users/${uid}`).get()
+			return result.data() as UserType
+		})
 
-      dispatch(setUser(userData))
-    })
+		Promise.all(promises).then((usersArr) => {
+			usersArr.forEach((user) => {
+				if (!user) return
+				dispatch(addUser(user))
+			})
+		})
+	}, [userList, users, dispatch])
 
-    const unsub2 = firebase
-      .firestore()
-      .collection(`posts`)
-      .onSnapshot((posts) => {
-        posts.docs.forEach((post) => {
-          const data = post.data() as PostType
-          firebase
-            .firestore()
-            .doc(`users/${data.authorUid}`)
-            .get()
-            .then((v) => {
-              if (!v.exists) throw new Error("user doesn't exist")
-              dispatch(addUser(v.data() as UserType))
-            })
+	useEffect(() => {
+		const unsubList: Array<() => void> = []
 
-          dispatch(setPost(data))
-        })
-      })
+		const unsub2 = firebase
+			.firestore()
+			.collection(`posts`)
+			.onSnapshot((posts) => {
+				posts.docs.forEach((post) => {
+					const postData = post.data() as PostType
+					if (!users.find((v) => v.uid === postData.authorUid)) {
+						dispatch(addUserUid(postData.authorUid))
+					}
 
-    const unsub3 = firebase
-      .firestore()
-      .collection(`comments`)
-      .onSnapshot((comments) => {
-        comments.forEach(({ data }) => {
-          dispatch(setComment(data() as CommentType))
-        })
-      })
+					dispatch(setPost(postData))
+				})
+			})
 
-    unsubList.push(unsub1, unsub2, unsub3)
+		const unsub3 = firebase
+			.firestore()
+			.collection(`comments`)
+			.onSnapshot((comments) => {
+				comments.forEach((comment) => {
+					dispatch(setComment(comment.data() as CommentType))
+				})
+			})
 
-    return () => unsubList.forEach((v) => v())
-  }, [dispatch, users])
+		unsubList.push(unsub2, unsub3)
 
-  return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Router>
-        <AppBarComponent />
-        <Switch>
-          <Route path="/test">{/* <Post /> */}</Route>
-          <Route path="/user">
-            <UserPage />
-          </Route>
-          <Route path="/signup">
-            <Sign isSignIn={false} />
-          </Route>
-          <Route path="/signin">
-            <Sign isSignIn={true} />
-          </Route>
-          <Route path="/searchpage">
-            <SearchPage />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Router>
-    </LocalizationProvider>
-  )
+		return () => unsubList.forEach((v) => v())
+	}, [dispatch, users])
+
+	return (
+		<LocalizationProvider dateAdapter={AdapterDateFns}>
+			<Router>
+				<AppBarComponent />
+				<Switch>
+					<Route path="/user">
+						<UserPage
+							userPosts={posts.filter((v) => v.authorUid === user.uid)}
+						/>
+					</Route>
+					<Route path="/usersettings">
+						<UserSettings />
+					</Route>
+					<Route path="/signup">
+						<Sign isSignIn={false} />
+					</Route>
+					<Route path="/signin">
+						<Sign isSignIn={true} />
+					</Route>
+					<Route path="/searchpage">
+						<SearchPage />
+					</Route>
+					<Route path="/">
+						<Home />
+					</Route>
+				</Switch>
+			</Router>
+		</LocalizationProvider>
+	)
 }
