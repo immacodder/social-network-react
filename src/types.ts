@@ -16,6 +16,7 @@ export interface CommentType {
   bodyText: string
   likedBy: string[]
   dislikedBy: string[]
+	createdAt: number
 }
 
 export interface UserType {

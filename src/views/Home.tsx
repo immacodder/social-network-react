@@ -20,7 +20,6 @@ import { fire } from '..'
 import { PostType, UserType } from '../types'
 import { v4 } from 'uuid'
 import { TextFieldValidate } from '../components/TextFieldValidate'
-
 const initialValues = {
 	postTitle: '',
 	postBody: '',
@@ -88,13 +87,15 @@ export function Home() {
 			user: users.find((user) => user.uid === post.authorUid)!,
 		}))
 
-	function closePostForm(formReset: Function) {
-		const ref = inputRef.current as HTMLInputElement
-		formReset()
-		ref.value = ''
-		setImages([])
-		setIsFormOpened(false)
-	}
+	const closePostForm = (formReset: Function) =>
+		setTimeout(() => {
+			const ref = inputRef.current as HTMLInputElement
+			formReset()
+			ref.value = ''
+			setImages([])
+			setIsFormOpened(false)
+		}, 0)
+
 	return (
 		<>
 			<Container>
@@ -125,7 +126,7 @@ export function Home() {
 													multiline
 													minRows={5}
 													variant="outlined"
-													label="Add post"
+													label="Post Body"
 													fullWidth
 												/>
 											)}

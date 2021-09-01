@@ -23,7 +23,6 @@ export function App() {
 	const userList = useAppSelector((s) => s.userList)
 	const users = useAppSelector((s) => s.users)
 	const user = useAppSelector((s) => s.user.userState as UserType)
-	const posts = useAppSelector((s) => s.posts)
 
 	useEffect(() => {
 		const promises = userList.map(async (uid) => {
@@ -78,10 +77,12 @@ export function App() {
 			<Router>
 				<AppBarComponent />
 				<Switch>
+					<Route
+						path="/user/:id"
+						render={({ match }) => <UserPage uid={match.params.id} />}
+					/>
 					<Route path="/user">
-						<UserPage
-							userPosts={posts.filter((v) => v.authorUid === user.uid)}
-						/>
+						<UserPage uid={user.uid} />
 					</Route>
 					<Route path="/usersettings">
 						<UserSettings />

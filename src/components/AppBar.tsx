@@ -13,15 +13,19 @@ import { AccountBox, Cog, Logout, Magnify } from 'mdi-material-ui'
 import { Link as RouterLink, useHistory } from 'react-router-dom'
 import React, { useRef, useState } from 'react'
 import { fire } from '..'
+import { useAppSelector } from '../hooks'
+import { UserType } from '../types'
 
 export function AppBarComponent() {
 	const [opened, setOpened] = useState(false)
 	const { push } = useHistory()
 	const anchorEl = useRef<HTMLDivElement>(null)
+	const user = useAppSelector((s) => s.user.userState as UserType)
 
 	function onSignOutClick() {
 		fire.auth().signOut()
 	}
+
 	return (
 		<>
 			<AppBar position="static" sx={{ mb: 2 }}>
@@ -45,8 +49,13 @@ export function AppBarComponent() {
 						<IconButton onClick={() => push('/searchpage')}>
 							<Magnify sx={{ color: 'white' }} />
 						</IconButton>
-						<Avatar className="button" onClick={() => setOpened(true)} ref={anchorEl}>
-							TK
+						<Avatar
+							className="button"
+							src={user.profileImage ?? undefined}
+							onClick={() => setOpened(true)}
+							ref={anchorEl}
+						>
+							{`${user.firstName[0]}${user.secondName[0]}`}
 						</Avatar>
 						<Menu
 							anchorEl={anchorEl.current!}

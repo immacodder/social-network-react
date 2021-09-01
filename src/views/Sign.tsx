@@ -62,6 +62,7 @@ export function Sign({ isSignIn }: Props) {
 		)
 		await fire.firestore().doc(`users/${user.uid}`).set(userDetails)
 		push('/')
+		location.reload()
 	}
 
 	return (
@@ -157,7 +158,7 @@ export function Sign({ isSignIn }: Props) {
 										color="secondary"
 										onClick={() => push(`sign${!isSignIn ? 'in' : 'up'}`)}
 									>
-										{term} instead
+										{!isSignIn ? 'Sign In' : 'Sign Up'} instead
 									</Button>
 								</Stack>
 							</Card>

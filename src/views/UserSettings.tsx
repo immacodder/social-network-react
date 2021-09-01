@@ -7,6 +7,7 @@ import {
 	Container,
 	Button,
 	CardActions,
+	LinearProgress,
 } from '@material-ui/core'
 import { DatePicker } from '@material-ui/lab'
 import { Form, Formik } from 'formik'
@@ -25,6 +26,8 @@ export function UserSettings() {
 	const inputRef = useRef<HTMLInputElement>(null)
 	const [date, setDate] = useState(new Date(user.dateOfBirth))
 	const { push } = useHistory()
+	const [progress, setProgress] = useState(false)
+	const [isImageTouched, setIsImageTouched] = useState(false)
 
 	const initialValues = {
 		firstName: user.firstName,
@@ -39,21 +42,38 @@ export function UserSettings() {
 			firstName: v.firstName,
 			secondName: v.secondName,
 			uid: user.uid,
-			profileImage: null,
+			profileImage: user.profileImage,
 		}
 
-		userDetails.profileImage = await putProfileImageInStorage(
-			inputRef,
-			user.uid,
-		)
+		setProgress(true)
+
+		if (isImageTouched) {
+			if (!inputRef.current!.files![0]) {
+				if (user.profileImage) {
+					const ref = fire.storage().refFromURL(user.profileImage)
+					await ref.delete()
+					await fire
+						.firestore()
+						.doc(`users/${user.uid}`)
+						.update({ profileImage: null })
+					userDetails.profileImage = null
+				}
+			} else {
+				userDetails.profileImage = await putProfileImageInStorage(
+					inputRef,
+					user.uid,
+				)
+			}
+		}
 
 		await fire.firestore().doc(`users/${user.uid}`).set(userDetails)
+		setProgress(false)
 		push('/user')
 		location.reload()
 	}
 
 	return (
-		<Container>
+		<Container sx={{ mb: 8 }}>
 			<Formik
 				onSubmit={onFormSubmit}
 				initialValues={initialValues}
@@ -65,7 +85,7 @@ export function UserSettings() {
 			>
 				{(formik) => (
 					<Form>
-						<Card sx={{ px: 4, pb: 2 }} elevation={8}>
+						<Card elevation={8}>
 							<CardHeader
 								sx={{
 									my: 2,
@@ -73,7 +93,7 @@ export function UserSettings() {
 								}}
 								title="User Settings"
 							/>
-							<CardContent>
+							<CardContent sx={{ px: 4, pb: 2 }}>
 								<Stack spacing={2}>
 									<TextFieldValidate label="First Name" name="firstName" />
 									<TextFieldValidate label="Second Name" name="secondName" />
@@ -83,7 +103,11 @@ export function UserSettings() {
 										value={date}
 										onChange={(date) => setDate(date!)}
 									/>
-									<ImagePicker inputRef={inputRef} />
+									<ImagePicker
+										inputRef={inputRef}
+										src={user.profileImage ?? undefined}
+										onChange={() => setIsImageTouched(true)}
+									/>
 									<TextFieldValidate
 										name="biography"
 										multiline
@@ -92,7 +116,7 @@ export function UserSettings() {
 									/>
 								</Stack>
 							</CardContent>
-							<CardActions>
+							<CardActions sx={{ px: 4 }}>
 								<Button type="submit" color="primary">
 									Submit
 								</Button>
@@ -100,6 +124,7 @@ export function UserSettings() {
 									Cancel
 								</Button>
 							</CardActions>
+							{progress && <LinearProgress />}
 						</Card>
 					</Form>
 				)}

@@ -1,6 +1,5 @@
 import * as Yup from 'yup'
 import {
-	Avatar,
 	Box,
 	Button,
 	Card,
@@ -25,11 +24,12 @@ import {
 } from 'mdi-material-ui'
 import { Comment } from './Comment'
 import { TextFieldValidate } from './TextFieldValidate'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { CommentType, PostType, UserType } from '../types'
 import { fire } from '..'
 import { v4 } from 'uuid'
 import { useAppSelector } from '../hooks'
+import { UserAvatar } from './UserAvatar'
 
 interface Props extends PostType {
 	user: UserType
@@ -39,20 +39,6 @@ interface Props extends PostType {
 export function Post(p: Props) {
 	const [isCommenting, setIsCommenting] = useState(false)
 	const user = useAppSelector((s) => s.user.userState as UserType)
-
-	function onCommentSubmit({ commentBody }: { commentBody: string }) {
-		setIsCommenting(false)
-		const uid = v4()
-		const comment: CommentType = {
-			authorUid: user.uid,
-			bodyText: commentBody,
-			dislikedBy: [],
-			likedBy: [],
-			parentPostUid: p.uid,
-			uid,
-		}
-		fire.firestore().collection('comments').doc(uid).set(comment)
-	}
 
 	function onLike(isLike: boolean = true) {
 		const property = isLike ? 'likedBy' : 'dislikedBy'
@@ -80,19 +66,19 @@ export function Post(p: Props) {
 			<Card elevation={4}>
 				<CardHeader
 					title={<Typography variant="subtitle1">{p.title}</Typography>}
-					subheader="Tigran Khachaturian"
+					subheader={`By ${p.user.firstName} ${p.user.secondName}`}
 					avatar={
-						<Avatar
+						<UserAvatar
+							redirect
+							uid={p.user.uid}
 							sx={{ width: 48, height: 48 }}
-							src={p.user.profileImage ?? undefined}
-						>
-							{`${p.user.firstName[0]}${p.user.secondName[0]}`}
-						</Avatar>
+						/>
 					}
 				/>
 				<CardContent>
 					<Typography>{p.bodyText}</Typography>
 				</CardContent>
+
 				{!!p.imageUrls.length && (
 					<ImageList
 						variant={p.imageUrls.length > 4 ? 'masonry' : 'standard'}
@@ -106,6 +92,7 @@ export function Post(p: Props) {
 						))}
 					</ImageList>
 				)}
+
 				<Divider />
 				<Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
 					<Stack direction="row">
@@ -123,9 +110,7 @@ export function Post(p: Props) {
 						<Stack direction="row" sx={{ alignItems: 'center' }}>
 							<Tooltip title="Dislike">
 								<IconButton
-									color={
-										p.dislikedBy.includes(user.uid) ? 'error' : 'default'
-									}
+									color={p.dislikedBy.includes(user.uid) ? 'error' : 'default'}
 									onClick={() => onLike(false)}
 								>
 									<ThumbDown />
@@ -134,6 +119,7 @@ export function Post(p: Props) {
 							<Typography>{p.dislikedBy.length}</Typography>
 						</Stack>
 					</Stack>
+
 					<Stack direction="row">
 						<Tooltip title="Share">
 							<IconButton>
@@ -148,47 +134,79 @@ export function Post(p: Props) {
 					</Stack>
 				</Box>
 			</Card>
+
 			<Box pt={2}>
 				<Formik
 					initialValues={{ commentBody: '' }}
 					validationSchema={Yup.object({
 						commentBody: Yup.string().required().max(320),
 					})}
-					onSubmit={(v) => onCommentSubmit(v)}
+					onSubmit={({ commentBody }, { resetForm }) => {
+						setIsCommenting(false)
+						const uid = v4()
+						const comment: CommentType = {
+							authorUid: user.uid,
+							bodyText: commentBody,
+							dislikedBy: [],
+							likedBy: [],
+							parentPostUid: p.uid,
+							uid,
+							createdAt: new Date().getTime(),
+						}
+						resetForm()
+						fire.firestore().collection('comments').doc(uid).set(comment)
+					}}
 				>
-					<Form>
-						{p.commentList.map((v) => (
-							<Comment {...v} key={v.uid} />
-						))}
-						{isCommenting && (
-							<Card elevation={4} sx={{ mt: 4 }}>
-								<CardHeader
-									sx={{ textAlign: 'left', pl: 2 }}
-									title={<Typography variant="h6">Add comment</Typography>}
+					{(formik) => (
+						<Form>
+							{p.commentList.map((v) => (
+								<Comment
+									onReplyClick={(user) => {
+										setTimeout(() =>
+											formik.setFieldValue(
+												'commentBody',
+												`${user.firstName} ${user.secondName}, `,
+											),
+										)
+										setIsCommenting(true)
+									}}
+									{...v}
+									key={v.uid}
 								/>
-								<CardContent>
-									<TextFieldValidate
-										label="What is it about?"
-										autoFocus
-										name="commentBody"
-										multiline
-										minRows={3}
-										fullWidth
+							))}
+							{isCommenting && (
+								<Card elevation={4} sx={{ mt: 4 }}>
+									<CardHeader
+										sx={{ textAlign: 'left', pl: 2 }}
+										title={<Typography variant="h6">Add comment</Typography>}
 									/>
-								</CardContent>
-								<CardActions>
-									<Button type="submit">Submit</Button>
-									<Button
-										onClick={() => setIsCommenting(false)}
-										type="button"
-										color="error"
-									>
-										Cancel
-									</Button>
-								</CardActions>
-							</Card>
-						)}
-					</Form>
+									<CardContent>
+										<TextFieldValidate
+											label="What is it about?"
+											autoFocus
+											name="commentBody"
+											multiline
+											minRows={3}
+											fullWidth
+										/>
+									</CardContent>
+									<CardActions>
+										<Button type="submit">Submit</Button>
+										<Button
+											onClick={() => {
+												setIsCommenting(false)
+												formik.resetForm()
+											}}
+											type="button"
+											color="error"
+										>
+											Cancel
+										</Button>
+									</CardActions>
+								</Card>
+							)}
+						</Form>
+					)}
 				</Formik>
 			</Box>
 		</Container>

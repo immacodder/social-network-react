@@ -1,6 +1,5 @@
 import {
 	Box,
-	Avatar,
 	Card,
 	CardContent,
 	Container,
@@ -9,18 +8,30 @@ import {
 } from '@material-ui/core'
 import { format } from 'date-fns'
 import { CalendarAccount } from 'mdi-material-ui'
-import React from 'react'
 import { Post } from '../components/Post'
+import { UserAvatar } from '../components/UserAvatar'
 import { useAppSelector } from '../hooks'
-import { PostType } from '../types'
+import { usePosts } from '../hooks/usePosts'
+import { useUserById } from '../hooks/useUserById'
 
 interface Props {
-	userPosts: PostType[]
+	uid: string
 }
 export function UserPage(p: Props) {
-	const user = useAppSelector((state) => state.user.userState)
 	const comments = useAppSelector((s) => s.comments)
-	if (typeof user === 'string') return null
+	const user = useUserById(p.uid)
+	const posts = usePosts(p.uid)
+
+	if (!user) return null
+
+	const userPosts = posts.map((post) => (
+		<Post
+			{...post}
+			key={post.uid}
+			user={user}
+			commentList={comments.filter((v) => v.parentPostUid === post.uid)}
+		/>
+	))
 
 	return (
 		<>
@@ -28,12 +39,10 @@ export function UserPage(p: Props) {
 				<Card elevation={8}>
 					<CardContent>
 						<Stack sx={{ textAlign: 'center', alignItems: 'center' }} gap={2}>
-							<Avatar
+							<UserAvatar
+								uid={user.uid}
 								sx={{ mx: 'auto', height: '100px', width: '100px' }}
-								src={user.profileImage || undefined}
-							>
-								{user.firstName[0] + user.secondName[0]}
-							</Avatar>
+							/>
 							<Typography variant="h5">{`${user.firstName} ${user.secondName}`}</Typography>
 							<Stack direction="row" gap={1}>
 								<CalendarAccount sx={{ color: 'text.secondary' }} />
@@ -55,14 +64,13 @@ export function UserPage(p: Props) {
 					</CardContent>
 				</Card>
 			</Container>
-			{p.userPosts.map((post) => (
-				<Post
-					{...post}
-					key={post.uid}
-					user={user}
-					commentList={comments.filter((v) => v.parentPostUid === post.uid)}
-				/>
-			))}
+			{userPosts.length ? (
+				userPosts
+			) : (
+				<Box mt={4} display="flex" alignItems="center" justifyContent="center">
+					<Typography>This user does not have any posts yet</Typography>
+				</Box>
+			)}
 		</>
 	)
 }

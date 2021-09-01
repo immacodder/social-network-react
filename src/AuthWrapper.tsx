@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core'
+import { Box, CircularProgress } from '@material-ui/core'
 import { useEffect } from 'react'
 import { useHistory, Switch, Route, Redirect } from 'react-router-dom'
 import { fire } from '.'
@@ -36,7 +36,7 @@ export function AuthWrapper() {
 					height: '100vh',
 				}}
 			>
-				<div>The user is loading...</div>
+				<CircularProgress />
 			</Box>
 		)
 	if (user === 'signed out') {

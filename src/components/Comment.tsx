@@ -1,5 +1,4 @@
 import {
-	Avatar,
 	Box,
 	Divider,
 	IconButton,
@@ -9,18 +8,27 @@ import {
 	Typography,
 } from '@material-ui/core'
 import { ThumbUp, ThumbDown, Reply } from 'mdi-material-ui'
-import React from 'react'
 import { fire } from '..'
 import { useAppSelector } from '../hooks'
+import { useUserById } from '../hooks/useUserById'
 import { CommentType, UserType } from '../types'
+import { UserAvatar } from './UserAvatar'
+import { formatDistance } from 'date-fns'
 
-export function Comment(p: CommentType) {
-	const user = useAppSelector((s) => s.user.userState as UserType)
+interface Props extends CommentType {
+	onReplyClick: (user: UserType) => void
+}
+
+export function Comment(p: Props) {
+	const selfUser = useAppSelector((s) => s.user.userState as UserType)
+	const user = useUserById(p.authorUid)
+
+	if (!user) return null
 
 	function onLike(isLike: boolean = true) {
 		const property = isLike ? 'likedBy' : 'dislikedBy'
 
-		if (p[property].find((v) => v === user.uid)) return
+		if (p[property].find((v) => v === selfUser.uid)) return
 
 		const commentRef = `comments/${p.uid}`
 
@@ -29,25 +37,36 @@ export function Comment(p: CommentType) {
 			.doc(commentRef)
 			.update({
 				[isLike ? 'dislikedBy' : 'likedBy']:
-					fire.firestore.FieldValue.arrayRemove(user.uid),
+					fire.firestore.FieldValue.arrayRemove(selfUser.uid),
 			})
 
 		fire
 			.firestore()
 			.doc(commentRef)
-			.update({ [property]: fire.firestore.FieldValue.arrayUnion(user.uid) })
+			.update({
+				[property]: fire.firestore.FieldValue.arrayUnion(selfUser.uid),
+			})
 	}
 
 	return (
 		<Box display="flex" alignItems="flex-start" mb={2} justifyContent="stretch">
-			<Avatar sx={{ width: 48, height: 48 }}>TK</Avatar>
+			<UserAvatar
+				redirect
+				uid={p.authorUid}
+				sx={{ width: '48px', height: '48px' }}
+			/>
 			<Paper
 				sx={{ ml: 1, p: 2, pb: 1, width: '100%', borderRadius: '16px' }}
 				elevation={4}
 			>
 				<Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-					<Typography variant="caption">Tigran Khachaturian</Typography>
-					<Typography variant="caption">07/07 at 5:00pm</Typography>
+					<Typography variant="caption">{`${user.firstName} ${user.secondName}`}</Typography>
+					<Typography variant="caption">
+						{formatDistance(p.createdAt, new Date(), {
+							includeSeconds: true,
+							addSuffix: true,
+						})}
+					</Typography>
 				</Box>
 				<Typography variant="body1" sx={{ my: 1 }}>
 					{p.bodyText}
@@ -59,7 +78,9 @@ export function Comment(p: CommentType) {
 							<Tooltip
 								title="Like"
 								color={
-									p.likedBy.find((v) => v === user.uid) ? 'primary' : 'default'
+									p.likedBy.find((v) => v === selfUser.uid)
+										? 'primary'
+										: 'default'
 								}
 							>
 								<IconButton
@@ -77,7 +98,9 @@ export function Comment(p: CommentType) {
 								onClick={() => onLike(false)}
 								title="Dislike"
 								color={
-									p.dislikedBy.find((v) => v === user.uid) ? 'error' : 'default'
+									p.dislikedBy.find((v) => v === selfUser.uid)
+										? 'error'
+										: 'default'
 								}
 							>
 								<IconButton>
@@ -89,7 +112,7 @@ export function Comment(p: CommentType) {
 					</Stack>
 					<Stack direction="row">
 						<Tooltip title="Reply">
-							<IconButton>
+							<IconButton onClick={() => p.onReplyClick(user)}>
 								<Reply />
 							</IconButton>
 						</Tooltip>
