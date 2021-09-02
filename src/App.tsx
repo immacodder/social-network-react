@@ -1,7 +1,7 @@
 /* eslint-disable no-debugger */
 import { LocalizationProvider } from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
-import { Sign } from './views/Sign'
+import { SignWrapper } from './views/Sign'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { Home } from './views/Home'
 import { AppBarComponent } from './components/AppBar'
@@ -88,10 +88,10 @@ export function App() {
 						<UserSettings />
 					</Route>
 					<Route path="/signup">
-						<Sign isSignIn={false} />
+						<SignWrapper isSignIn={false} />
 					</Route>
 					<Route path="/signin">
-						<Sign isSignIn={true} />
+						<SignWrapper isSignIn={true} />
 					</Route>
 					<Route path="/searchpage">
 						<SearchPage />

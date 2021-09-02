@@ -9,6 +9,8 @@ interface Props {
 	onChange?: (image: string | null) => void
 }
 
+// Todo
+// Make sure that src is not only used in preview, but also affects the submitting
 export function ImagePicker(p: Props) {
 	const [imagePreview, setImagePreview] = useState<null | string>(null)
 

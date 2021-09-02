@@ -1,30 +1,22 @@
-import { Card, Container } from '@material-ui/core'
+import { Container, TextField } from '@material-ui/core'
 import { Formik } from 'formik'
+import { useState } from 'react'
 import * as Yup from 'yup'
-import { TextFieldValidate } from '../components/TextFieldValidate'
 
 export function SearchPage() {
+	// const posts = useState()
+	const [term, setTerm] = useState('')
+
 	return (
 		<Container>
-			<Formik
-				initialValues={{ searchTerm: '' }}
-				onSubmit={() => undefined}
-				validationSchema={Yup.object({
-					searchTerm: Yup.string()
-						.required(`You can't search for nothingness`)
-						.max(100),
-				})}
-			>
-				<Card>
-					<TextFieldValidate
-						label="Search for anything"
-						fullWidth
-						InputProps={{ fullWidth: true }}
-						autoFocus
-						name="searchTerm"
-					/>
-				</Card>
-			</Formik>
+			<TextField
+				label="Search for anything"
+				fullWidth
+				InputProps={{ fullWidth: true }}
+				autoFocus
+				value={term}
+				onChange={(e) => setTerm(e.target.value)}
+			/>
 		</Container>
 	)
 }
