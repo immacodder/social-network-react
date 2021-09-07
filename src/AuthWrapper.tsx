@@ -1,24 +1,28 @@
 import { Box, CircularProgress } from '@material-ui/core'
 import { useEffect } from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { fire } from '.'
 import { App } from './App'
 import { useAppDispatch, useAppSelector } from './hooks'
 import { setUser } from './slices/userSlice'
 import { UserType } from './types'
 import { SignWrapper } from './views/Sign'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { firebaseApp } from './firebase'
+import { doc, getDoc, getFirestore} from 'firebase/firestore'
+
+const auth = getAuth(firebaseApp)
+const db = getFirestore(firebaseApp)
 
 export function AuthWrapper() {
 	const user = useAppSelector((s) => s.user.userState)
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
-		const unsub = fire.auth().onAuthStateChanged(async (u) => {
+		const unsub = onAuthStateChanged(auth, async (u) => {
 			if (!u) return dispatch(setUser('signed out'))
 			if (typeof user === 'string') {
-				const userData = (
-					await fire.firestore().doc(`users/${u.uid}`).get()
-				).data() as UserType
+				const userRef = doc(db, `users/${u.uid}`)
+				const userData = (await getDoc(userRef)).data() as UserType
 				dispatch(setUser(userData))
 			}
 		})

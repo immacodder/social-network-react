@@ -11,10 +11,13 @@ import {
 } from '@material-ui/core'
 import { AccountBox, Cog, Logout, Magnify } from 'mdi-material-ui'
 import { Link as RouterLink, useHistory } from 'react-router-dom'
-import React, { useRef, useState } from 'react'
-import { fire } from '..'
+import { useRef, useState } from 'react'
 import { useAppSelector } from '../hooks'
 import { UserType } from '../types'
+import { firebaseApp } from '../firebase'
+import { getAuth, signOut } from 'firebase/auth'
+
+const auth = getAuth(firebaseApp)
 
 export function AppBarComponent() {
 	const [opened, setOpened] = useState(false)
@@ -23,7 +26,7 @@ export function AppBarComponent() {
 	const user = useAppSelector((s) => s.user.userState as UserType)
 
 	function onSignOutClick() {
-		fire.auth().signOut()
+		signOut(auth)
 	}
 
 	return (

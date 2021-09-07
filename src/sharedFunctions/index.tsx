@@ -1,6 +1,9 @@
 import browserImageCompression from 'browser-image-compression'
 import React from 'react'
-import { fire } from '../'
+import { firebaseApp } from '../firebase'
+import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage'
+
+const storage = getStorage(firebaseApp)
 
 type inputRef = React.RefObject<HTMLInputElement>
 
@@ -30,12 +33,12 @@ export const putProfileImageInStorage = async function (
 	const compressedImage = await compressImage(inputRef)
 	if (!compressedImage) return null
 
-	const storage = fire.storage()
-	const ref = storage.ref(
+	const profileImageRef = ref(
+		storage,
 		`profileImages/${userUid}.${compressedImage.name.split('.').pop()}`,
 	)
-	await ref.put(compressedImage)
+	await uploadBytes(profileImageRef, compressedImage)
 
-	const url = (await ref.getDownloadURL()) as string
+	const url = (await getDownloadURL(profileImageRef)) as string
 	return url
 }

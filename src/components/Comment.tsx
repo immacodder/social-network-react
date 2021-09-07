@@ -8,12 +8,21 @@ import {
 	Typography,
 } from '@material-ui/core'
 import { ThumbUp, ThumbDown, Reply } from 'mdi-material-ui'
-import { fire } from '..'
 import { useAppSelector } from '../hooks'
 import { useUserById } from '../hooks/useUserById'
 import { CommentType, UserType } from '../types'
 import { UserAvatar } from './UserAvatar'
 import { formatDistance } from 'date-fns'
+import { firebaseApp } from '../firebase'
+import {
+	getFirestore,
+	doc,
+	updateDoc,
+	arrayRemove,
+	arrayUnion,
+} from 'firebase/firestore'
+
+const db = getFirestore(firebaseApp)
 
 interface Props extends CommentType {
 	onReplyClick: (user: UserType) => void
@@ -32,20 +41,13 @@ export function Comment(p: Props) {
 
 		const commentRef = `comments/${p.uid}`
 
-		fire
-			.firestore()
-			.doc(commentRef)
-			.update({
-				[isLike ? 'dislikedBy' : 'likedBy']:
-					fire.firestore.FieldValue.arrayRemove(selfUser.uid),
-			})
+		updateDoc(doc(db, commentRef), {
+			[isLike ? 'dislikedBy' : 'likedBy']: arrayRemove(selfUser.uid),
+		})
 
-		fire
-			.firestore()
-			.doc(commentRef)
-			.update({
-				[property]: fire.firestore.FieldValue.arrayUnion(selfUser.uid),
-			})
+		updateDoc(doc(db, commentRef), {
+			[property]: arrayUnion(selfUser.uid),
+		})
 	}
 
 	return (

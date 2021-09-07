@@ -1,78 +1,80 @@
 {
-  "name": "react-social-app",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@date-io/date-fns": "^2.11.0",
-    "@emotion/react": "^11.4.1",
-    "@emotion/styled": "^11.3.0",
-    "@material-ui/core": "^5.0.0-beta.3",
-    "@material-ui/lab": "^5.0.0-alpha.42",
-    "@reduxjs/toolkit": "^1.6.1",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@types/react-redux": "^7.1.18",
-    "@types/react-router-dom": "^5.1.8",
-    "@types/redux": "^3.6.0",
-    "@types/uuid": "^8.3.1",
-    "@types/yup": "^0.29.13",
-    "browser-image-compression": "^1.0.15",
-    "date-fns": "^2.23.0",
-    "firebase": "^8.9.1",
-    "formik": "^2.2.9",
-    "lodash": "^4.17.21",
-    "mdi-material-ui": "^6.22.1",
-    "promise-file-reader": "^1.0.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-redux": "^7.2.4",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
-    "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1",
-    "yup": "^0.32.9"
-  },
-  "scripts": {
-    "start": "BROWSER=none DISABLE_ESLINT_PLUGIN=true react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.29.2",
-    "@typescript-eslint/parser": "^4.29.2",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.24.0",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-react-hooks": "^4.2.0"
-  }
+	"name": "react-social-app",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@date-io/date-fns": "^2.11.0",
+		"@emotion/react": "^11.4.1",
+		"@emotion/styled": "^11.3.0",
+		"@material-ui/core": "^5.0.0-beta.3",
+		"@material-ui/lab": "^5.0.0-alpha.42",
+		"@reduxjs/toolkit": "^1.6.1",
+		"@testing-library/jest-dom": "^5.11.4",
+		"@testing-library/react": "^11.1.0",
+		"@testing-library/user-event": "^12.1.10",
+		"@types/jest": "^26.0.15",
+		"@types/node": "^12.0.0",
+		"@types/react": "^17.0.0",
+		"@types/react-dom": "^17.0.0",
+		"@types/react-redux": "^7.1.18",
+		"@types/react-router-dom": "^5.1.8",
+		"@types/redux": "^3.6.0",
+		"@types/uuid": "^8.3.1",
+		"@types/yup": "^0.29.13",
+		"browser-image-compression": "^1.0.15",
+		"date-fns": "^2.23.0",
+		"firebase": "^9.0.1",
+		"formik": "^2.2.9",
+		"lodash": "^4.17.21",
+		"mdi-material-ui": "^7.0.0",
+		"promise-file-reader": "^1.0.3",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-redux": "^7.2.4",
+		"react-router-dom": "^5.2.0",
+		"react-scripts": "4.0.3",
+		"typescript": "^4.1.2",
+		"web-vitals": "^1.0.1",
+		"yup": "^0.32.9"
+	},
+	"scripts": {
+		"start": "dpdm ./* > dependenciesCheck.txt && dpdm ./* --warning false && BROWSER=none DISABLE_ESLINT_PLUGIN=true react-scripts start",
+		"build": "react-scripts build",
+		"test": "dpdm ./*",
+		"eject": "react-scripts eject",
+		"deletedb": "curl -v -X DELETE \"http://localhost:8080/emulator/v1/projects/social-network-17737/databases/(default)/documents\""
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^4.29.2",
+		"@typescript-eslint/parser": "^4.29.2",
+		"dpdm": "^3.7.1",
+		"eslint": "^7.32.0",
+		"eslint-config-airbnb": "^18.2.1",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-config-standard": "^16.0.3",
+		"eslint-plugin-import": "^2.24.0",
+		"eslint-plugin-jsx-a11y": "^6.4.1",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-promise": "^5.1.0",
+		"eslint-plugin-react": "^7.24.0",
+		"eslint-plugin-react-hooks": "^4.2.0"
+	}
 }

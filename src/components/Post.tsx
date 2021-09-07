@@ -26,10 +26,20 @@ import { Comment } from './Comment'
 import { TextFieldValidate } from './TextFieldValidate'
 import { useState } from 'react'
 import { CommentType, PostType, UserType } from '../types'
-import { fire } from '..'
 import { v4 } from 'uuid'
 import { useAppSelector } from '../hooks'
 import { UserAvatar } from './UserAvatar'
+import { firebaseApp } from '../firebase'
+import {
+	getFirestore,
+	doc,
+	updateDoc,
+	arrayRemove,
+	arrayUnion,
+	setDoc,
+} from 'firebase/firestore'
+
+const db = getFirestore(firebaseApp)
 
 interface Props extends PostType {
 	user: UserType
@@ -47,18 +57,11 @@ export function Post(p: Props) {
 
 		const postRef = `posts/${p.uid}`
 
-		fire
-			.firestore()
-			.doc(postRef)
-			.update({
-				[isLike ? 'dislikedBy' : 'likedBy']:
-					fire.firestore.FieldValue.arrayRemove(user.uid),
-			})
+		updateDoc(doc(db, postRef), {
+			[isLike ? 'dislikedBy' : 'likedBy']: arrayRemove(user.uid),
+		})
 
-		fire
-			.firestore()
-			.doc(postRef)
-			.update({ [property]: fire.firestore.FieldValue.arrayUnion(user.uid) })
+		updateDoc(doc(db, postRef), { [property]: arrayUnion(user.uid) })
 	}
 
 	return (
@@ -154,7 +157,7 @@ export function Post(p: Props) {
 							createdAt: new Date().getTime(),
 						}
 						resetForm()
-						fire.firestore().collection('comments').doc(uid).set(comment)
+						setDoc(doc(db, `comments/${uid}`), comment)
 					}}
 				>
 					{(formik) => (

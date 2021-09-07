@@ -16,10 +16,15 @@ import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { useAppSelector } from '../hooks'
 import { Post } from '../components/Post'
-import { fire } from '..'
 import { PostType, UserType } from '../types'
 import { v4 } from 'uuid'
 import { TextFieldValidate } from '../components/TextFieldValidate'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { getFirestore, doc, setDoc } from 'firebase/firestore'
+
+const storage = getStorage()
+const db = getFirestore()
+
 const initialValues = {
 	postTitle: '',
 	postBody: '',
@@ -60,22 +65,22 @@ export function Home() {
 
 		const putImagesInStorage = async function () {
 			const fileList = Array.from(inputRef?.current?.files as FileList)
-			const storage = fire.storage()
 			if (!fileList.length) return []
 
 			const resolveArr: Promise<string>[] = fileList.map(async (image) => {
-				const ref = storage.ref(
+				const postImageRef = ref(
+					storage,
 					`postImages/${v4()}.${image.name.split('.').pop()}`,
 				)
-				await ref.put(image)
-				return await ref.getDownloadURL()
+				await uploadBytes(postImageRef, image)
+				return await getDownloadURL(postImageRef)
 			})
 
 			return await Promise.all(resolveArr)
 		}
 
 		post.imageUrls = await putImagesInStorage()
-		await fire.firestore().doc(`posts/${post.uid}`).set(post)
+		await setDoc(doc(db, `posts/${post.uid}`), post)
 	}
 
 	const postsWithUsers = posts

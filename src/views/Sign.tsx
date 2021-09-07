@@ -15,10 +15,23 @@ import { Formik, Form, useFormikContext } from 'formik'
 import { DatePicker } from '@material-ui/lab'
 import { useHistory } from 'react-router-dom'
 import React, { useEffect, useRef, useState } from 'react'
-import { fire } from '..'
 import { UserType } from '../types'
 import { ImagePicker } from '../components/ImagePicker'
 import { putProfileImageInStorage } from '../sharedFunctions'
+import { firebaseApp } from '../firebase'
+import {
+	getAuth,
+	User,
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+	signInWithPopup,
+	onAuthStateChanged,
+	GoogleAuthProvider,
+} from 'firebase/auth'
+import { getFirestore, doc, setDoc } from 'firebase/firestore'
+
+const auth = getAuth(firebaseApp)
+const db = getFirestore(firebaseApp)
 
 const formValues = {
 	email: '',
@@ -39,9 +52,7 @@ export function SignWrapper({ isSignIn }: Props) {
 	const inputRef = useRef<HTMLInputElement>(null)
 	const [date, setDate] = useState(new Date())
 	const { push } = useHistory()
-	const [userFromProvider, setUserFromProvider] = useState<null | fire.User>(
-		null,
-	)
+	const [userFromProvider, setUserFromProvider] = useState<null | User>(null)
 	return (
 		<Formik
 			initialValues={formValues}
@@ -78,13 +89,12 @@ async function onSignUp(
 	inputRef: inputRef,
 	push: push,
 	date: Date,
-	userFromProvider?: fire.User,
+	userFromProvider?: User,
 ) {
-	let user: fire.User
+	let user: User
 	if (!userFromProvider) {
-		user = (
-			await fire.auth().createUserWithEmailAndPassword(v.email, v.password)
-		).user!
+		user = (await createUserWithEmailAndPassword(auth, v.email, v.password))
+			.user as User
 	} else user = userFromProvider
 
 	const userDetails: UserType = {
@@ -103,13 +113,13 @@ async function onSignUp(
 			user.uid,
 		)
 	}
-	await fire.firestore().doc(`users/${user.uid}`).set(userDetails)
+	await setDoc(doc(db, `users/${user.uid}`), userDetails)
 	push('/')
 	location.reload()
 }
 
 async function onSignIn(v: typeof formValues, push: push) {
-	fire.auth().signInWithEmailAndPassword(v.email, v.password)
+	signInWithEmailAndPassword(auth, v.email, v.password)
 	push('/')
 }
 
@@ -118,8 +128,8 @@ interface SignProps {
 	date: Date
 	setDate(date: Date): void
 	isSignIn: boolean
-	userFromProvider: fire.User | null
-	setUserFromProvider(user: fire.User): void
+	userFromProvider: User | null
+	setUserFromProvider(user: User): void
 }
 
 function Sign({
@@ -135,10 +145,10 @@ function Sign({
 	const { setFieldValue } = useFormikContext()
 
 	useEffect(() => {
-		const unsub = fire.auth().onAuthStateChanged((user) => {
-			if (!user) return
+		const unsub = onAuthStateChanged(auth, (user) => {
+			if (!user) return null
 			const userName = user.displayName?.split(' ')
-			setUserFromProvider(user)
+			setUserFromProvider(user as User)
 			setFieldValue('email', user.email)
 			userName && setFieldValue('firstName', userName[0])
 			userName && setFieldValue('secondName', userName[1])
@@ -147,9 +157,9 @@ function Sign({
 	}, [setFieldValue, inputRef, setUserFromProvider])
 
 	async function onSignWithGoogleClick() {
-		const googleProvider = new fire.auth.GoogleAuthProvider()
+		const googleProvider = new GoogleAuthProvider()
 		try {
-			await fire.auth().signInWithPopup(googleProvider)
+			await signInWithPopup(auth, googleProvider)
 			push('/signup')
 		} catch (e) {
 			console.error(e)

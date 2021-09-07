@@ -18,8 +18,13 @@ import * as yup from 'yup'
 import { useAppSelector } from '../hooks'
 import { UserType } from '../types'
 import { putProfileImageInStorage } from '../sharedFunctions'
-import { fire } from '..'
 import { useHistory } from 'react-router-dom'
+import { firebaseApp } from '../firebase'
+import { getFirestore, doc, updateDoc, setDoc } from 'firebase/firestore'
+import { getStorage, ref, deleteObject } from 'firebase/storage'
+
+const storage = getStorage(firebaseApp)
+const db = getFirestore(firebaseApp)
 
 export function UserSettings() {
 	const user = useAppSelector((s) => s.user.userState as UserType)
@@ -50,12 +55,9 @@ export function UserSettings() {
 		if (isImageTouched) {
 			if (!inputRef.current!.files![0]) {
 				if (user.profileImage) {
-					const ref = fire.storage().refFromURL(user.profileImage)
-					await ref.delete()
-					await fire
-						.firestore()
-						.doc(`users/${user.uid}`)
-						.update({ profileImage: null })
+					const profileImageRef = ref(storage, user.profileImage)
+					await deleteObject(profileImageRef)
+					await updateDoc(doc(db, `users/${user.uid}`), { profileImage: null })
 					userDetails.profileImage = null
 				}
 			} else {
@@ -66,7 +68,7 @@ export function UserSettings() {
 			}
 		}
 
-		await fire.firestore().doc(`users/${user.uid}`).set(userDetails)
+		await setDoc(doc(db, `users/${user.uid}`), userDetails)
 		setProgress(false)
 		push('/user')
 		location.reload()

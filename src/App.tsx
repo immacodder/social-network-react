@@ -7,16 +7,24 @@ import { Home } from './views/Home'
 import { AppBarComponent } from './components/AppBar'
 import { SearchPage } from './views/SearchPage'
 import { useEffect } from 'react'
-import firebase from 'firebase/app'
 import { useAppDispatch, useAppSelector } from './hooks'
 import { CommentType, PostType, UserType } from './types'
 import { setPost } from './slices/postsSlice'
 import { setComment } from './slices/commentsSlice'
-import { fire } from '.'
 import { addUser } from './slices/usersSlice'
 import { addUserUid } from './slices/userListSlice'
 import { UserPage } from './views/UserPage'
 import { UserSettings } from './views/UserSettings'
+import {
+	getFirestore,
+	getDoc,
+	doc,
+	collection,
+	onSnapshot,
+} from 'firebase/firestore'
+import { firebaseApp } from './firebase'
+
+const db = getFirestore(firebaseApp)
 
 export function App() {
 	const dispatch = useAppDispatch()
@@ -28,8 +36,8 @@ export function App() {
 		const promises = userList.map(async (uid) => {
 			const userFindResult = users.find((v) => v.uid === uid)
 			if (userFindResult) return
-
-			const result = await fire.firestore().doc(`users/${uid}`).get()
+			const userRef = doc(db, `users/${uid}`)
+			const result = await getDoc(userRef)
 			return result.data() as UserType
 		})
 
@@ -44,28 +52,22 @@ export function App() {
 	useEffect(() => {
 		const unsubList: Array<() => void> = []
 
-		const unsub2 = firebase
-			.firestore()
-			.collection(`posts`)
-			.onSnapshot((posts) => {
-				posts.docs.forEach((post) => {
-					const postData = post.data() as PostType
-					if (!users.find((v) => v.uid === postData.authorUid)) {
-						dispatch(addUserUid(postData.authorUid))
-					}
+		const unsub2 = onSnapshot(collection(db, `posts`), (posts) => {
+			posts.docs.forEach((post) => {
+				const postData = post.data() as PostType
+				if (!users.find((v) => v.uid === postData.authorUid)) {
+					dispatch(addUserUid(postData.authorUid))
+				}
 
-					dispatch(setPost(postData))
-				})
+				dispatch(setPost(postData))
 			})
+		})
 
-		const unsub3 = firebase
-			.firestore()
-			.collection(`comments`)
-			.onSnapshot((comments) => {
-				comments.forEach((comment) => {
-					dispatch(setComment(comment.data() as CommentType))
-				})
+		const unsub3 = onSnapshot(collection(db, `comments`), (comments) => {
+			comments.forEach((comment) => {
+				dispatch(setComment(comment.data() as CommentType))
 			})
+		})
 
 		unsubList.push(unsub2, unsub3)
 
