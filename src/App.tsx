@@ -1,4 +1,3 @@
-/* eslint-disable no-debugger */
 import { LocalizationProvider } from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import { SignWrapper } from './views/Sign'

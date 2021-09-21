@@ -38,42 +38,43 @@ import {
 	arrayUnion,
 	setDoc,
 } from 'firebase/firestore'
+import { useUserById } from '../hooks/useUserById'
 
 const db = getFirestore(firebaseApp)
 
-interface Props extends PostType {
-	user: UserType
-	commentList: CommentType[]
-}
-
-export function Post(p: Props) {
+export function Post(p: PostType) {
 	const [isCommenting, setIsCommenting] = useState(false)
-	const user = useAppSelector((s) => s.user.userState as UserType)
+	const currentUser = useAppSelector((s) => s.user.userState as UserType)
+	const postUser = useUserById(p.authorUid)
+	const comments = useAppSelector((state) => state.comments)
+	const commentList = comments.filter((v) => v.parentPostUid === p.uid)
 
 	function onLike(isLike: boolean = true) {
 		const property = isLike ? 'likedBy' : 'dislikedBy'
 
-		if (p[property].find((v) => v === user.uid)) return
+		if (p[property].find((v) => v === currentUser.uid)) return
 
 		const postRef = `posts/${p.uid}`
 
 		updateDoc(doc(db, postRef), {
-			[isLike ? 'dislikedBy' : 'likedBy']: arrayRemove(user.uid),
+			[isLike ? 'dislikedBy' : 'likedBy']: arrayRemove(currentUser.uid),
 		})
 
-		updateDoc(doc(db, postRef), { [property]: arrayUnion(user.uid) })
+		updateDoc(doc(db, postRef), { [property]: arrayUnion(currentUser.uid) })
 	}
 
+	if (!postUser) return null
+
 	return (
-		<Container sx={{ mt: 2, mb: 4 }}>
+		<Container sx={{ mt: 2}}>
 			<Card elevation={4}>
 				<CardHeader
 					title={<Typography variant="subtitle1">{p.title}</Typography>}
-					subheader={`By ${p.user.firstName} ${p.user.secondName}`}
+					subheader={`By ${postUser.firstName} ${postUser.secondName}`}
 					avatar={
 						<UserAvatar
 							redirect
-							uid={p.user.uid}
+							uid={postUser.uid}
 							sx={{ width: 48, height: 48 }}
 						/>
 					}
@@ -102,7 +103,9 @@ export function Post(p: Props) {
 						<Stack direction="row" sx={{ alignItems: 'center' }}>
 							<Tooltip title="Like">
 								<IconButton
-									color={p.likedBy.includes(user.uid) ? 'primary' : 'default'}
+									color={
+										p.likedBy.includes(currentUser.uid) ? 'primary' : 'default'
+									}
 									onClick={() => onLike(true)}
 								>
 									<ThumbUp />
@@ -113,7 +116,9 @@ export function Post(p: Props) {
 						<Stack direction="row" sx={{ alignItems: 'center' }}>
 							<Tooltip title="Dislike">
 								<IconButton
-									color={p.dislikedBy.includes(user.uid) ? 'error' : 'default'}
+									color={
+										p.dislikedBy.includes(currentUser.uid) ? 'error' : 'default'
+									}
 									onClick={() => onLike(false)}
 								>
 									<ThumbDown />
@@ -148,7 +153,7 @@ export function Post(p: Props) {
 						setIsCommenting(false)
 						const uid = v4()
 						const comment: CommentType = {
-							authorUid: user.uid,
+							authorUid: currentUser.uid,
 							bodyText: commentBody,
 							dislikedBy: [],
 							likedBy: [],
@@ -162,7 +167,7 @@ export function Post(p: Props) {
 				>
 					{(formik) => (
 						<Form>
-							{p.commentList.map((v) => (
+							{commentList.map((v) => (
 								<Comment
 									onReplyClick={(user) => {
 										setTimeout(() =>

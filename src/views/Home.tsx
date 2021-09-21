@@ -32,8 +32,6 @@ const initialValues = {
 
 export function Home() {
 	const posts = useAppSelector((state) => state.posts)
-	const users = useAppSelector((state) => state.users)
-	const comments = useAppSelector((state) => state.comments)
 	const [images, setImages] = useState<string[]>([])
 	const inputRef = useRef<HTMLInputElement>(null)
 	const currentUserUid = useAppSelector(
@@ -51,6 +49,7 @@ export function Home() {
 
 		setImages(await Promise.all(listOfPromises))
 	}
+
 	async function onFormSubmit(values: typeof initialValues) {
 		const post: PostType = {
 			authorUid: currentUserUid,
@@ -66,31 +65,32 @@ export function Home() {
 		const putImagesInStorage = async function () {
 			const fileList = Array.from(inputRef?.current?.files as FileList)
 			if (!fileList.length) return []
-
+			debugger
 			const resolveArr: Promise<string>[] = fileList.map(async (image) => {
+				const refPath = `postImages/${v4()}.${image.name.split('.').pop()}`
 				const postImageRef = ref(
 					storage,
-					`postImages/${v4()}.${image.name.split('.').pop()}`,
+					refPath
 				)
+				console.log(refPath)
+				debugger
 				await uploadBytes(postImageRef, image)
+				debugger
 				return await getDownloadURL(postImageRef)
 			})
 
-			return await Promise.all(resolveArr)
+			try {
+				const result = await Promise.all(resolveArr)
+				console.log(result)
+				return result
+			} catch (e) {
+				throw console.error(e)
+			}
 		}
 
 		post.imageUrls = await putImagesInStorage()
-		await setDoc(doc(db, `posts/${post.uid}`), post)
+		const result = await setDoc(doc(db, `posts/${post.uid}`), post)
 	}
-
-	const postsWithUsers = posts
-		.filter((post) => {
-			return !!users.find((user) => user.uid === post.authorUid)
-		})
-		.map((post) => ({
-			...post,
-			user: users.find((user) => user.uid === post.authorUid)!,
-		}))
 
 	const closePostForm = (formReset: Function) =>
 		setTimeout(() => {
@@ -115,7 +115,7 @@ export function Home() {
 					{(formik) => (
 						<>
 							<Form>
-								<Card elevation={8}>
+								<Card elevation={8} sx={{ mb: 4 }}>
 									<CardContent sx={{ pb: 0 }}>
 										<Stack gap={2}>
 											<TextFieldValidate
@@ -199,13 +199,11 @@ export function Home() {
 					)}
 				</Formik>
 			</Container>
-			{postsWithUsers.map((post) => (
-				<Post
-					{...post}
-					key={post.uid}
-					commentList={comments.filter((v) => v.parentPostUid === post.uid)}
-				/>
-			))}
+			<Box mb={8}>
+				{posts.map((post) => (
+					<Post key={post.uid} {...post} />
+				))}
+			</Box>
 		</>
 	)
 }

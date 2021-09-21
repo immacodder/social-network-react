@@ -18,20 +18,12 @@ interface Props {
 	uid: string
 }
 export function UserPage(p: Props) {
-	const comments = useAppSelector((s) => s.comments)
 	const user = useUserById(p.uid)
 	const posts = usePosts(p.uid)
 
 	if (!user) return null
 
-	const userPosts = posts.map((post) => (
-		<Post
-			{...post}
-			key={post.uid}
-			user={user}
-			commentList={comments.filter((v) => v.parentPostUid === post.uid)}
-		/>
-	))
+	const userPosts = posts.map((post) => <Post {...post} key={post.uid} />)
 
 	return (
 		<>
