@@ -10,7 +10,6 @@ import { format } from 'date-fns'
 import { CalendarAccount } from 'mdi-material-ui'
 import { Post } from '../components/Post'
 import { UserAvatar } from '../components/UserAvatar'
-import { useAppSelector } from '../hooks'
 import { usePosts } from '../hooks/usePosts'
 import { useUserById } from '../hooks/useUserById'
 

@@ -65,31 +65,34 @@ export function Home() {
 		const putImagesInStorage = async function () {
 			const fileList = Array.from(inputRef?.current?.files as FileList)
 			if (!fileList.length) return []
-			debugger
+			/// FUCK YOU FUCK YOU FUCK YOU FUCK YOU I HATE MY LIFE WHY DOES THIS NOT WORKKK
 			const resolveArr: Promise<string>[] = fileList.map(async (image) => {
 				const refPath = `postImages/${v4()}.${image.name.split('.').pop()}`
-				const postImageRef = ref(
-					storage,
-					refPath
-				)
-				console.log(refPath)
-				debugger
+				const postImageRef = ref(storage, refPath)
 				await uploadBytes(postImageRef, image)
-				debugger
-				return await getDownloadURL(postImageRef)
+				return getDownloadURL(postImageRef)
 			})
 
-			try {
-				const result = await Promise.all(resolveArr)
-				console.log(result)
-				return result
-			} catch (e) {
-				throw console.error(e)
+			async function resolveSequantially() {
+				const tempArr: string[] = []
+				console.log('is this even running?')
+				for (let i = 0; i < resolveArr.length; i++) {
+					console.log('???')
+					const result = await resolveArr[i]
+					console.log(result)
+					tempArr.push(result)
+				}
+				return tempArr
 			}
+
+			const result = await resolveSequantially()
+
+			return result
 		}
 
 		post.imageUrls = await putImagesInStorage()
 		const result = await setDoc(doc(db, `posts/${post.uid}`), post)
+		console.log(result)
 	}
 
 	const closePostForm = (formReset: Function) =>

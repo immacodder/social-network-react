@@ -1,1 +1,1 @@
-firebase emulators:start & ./runmeili.sh & yarn start &> /dev/null && fg
+firebase emulators:start & ./runmeili.sh && fg

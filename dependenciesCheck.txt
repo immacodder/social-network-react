@@ -2,185 +2,187 @@
   - 00) README.md
   - 01) ./data.ms
   - 02) dependenciesCheck.txt
-  - 03) firebase.json
-  - 04) firestore.indexes.json
-  - 05) firestore.rules
-  - 06) ./functions
-  - 07) meilisearch
-  - 08) ./node_modules
-  - 09) package.json
-  - 10) ./public
-  - 11) runmeili.sh
-  - 12) src/index.tsx
-  ·   - 13) node_modules/@material-ui/core/index.js
-  ·   - 14) node_modules/react-dom/index.js
-  ·   - 15) node_modules/react-redux/es/index.js
-  ·   - 16) src/store.ts
-  ·   ·   - 17) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
-  ·   ·   - 18) src/slices/commentsSlice.ts
-  ·   ·   ·   - 17) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
-  ·   ·   ·   - 19) src/types.ts
-  ·   ·   - 20) src/slices/postsSlice.ts
-  ·   ·   ·   - 17) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
-  ·   ·   ·   - 19) src/types.ts
-  ·   ·   - 21) src/slices/userListSlice.ts
-  ·   ·   ·   - 17) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
-  ·   ·   - 22) src/slices/userSlice.ts
-  ·   ·   ·   - 17) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
-  ·   ·   ·   - 19) src/types.ts
-  ·   ·   - 23) src/slices/usersSlice.ts
-  ·   ·       - 17) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
-  ·   ·       - 19) src/types.ts
-  ·   - 24) node_modules/react-router-dom/esm/react-router-dom.js
-  ·   - 25) node_modules/@material-ui/lab/index.js
-  ·   - 26) node_modules/@material-ui/lab/AdapterDateFns/index.js
-  ·   - 27) src/AuthWrapper.tsx
-  ·       - 13) node_modules/@material-ui/core/index.js
-  ·       - 28) node_modules/react/index.js
-  ·       - 24) node_modules/react-router-dom/esm/react-router-dom.js
-  ·       - 29) src/App.tsx
-  ·       ·   - 25) node_modules/@material-ui/lab/index.js
-  ·       ·   - 26) node_modules/@material-ui/lab/AdapterDateFns/index.js
-  ·       ·   - 30) src/views/Sign.tsx
-  ·       ·   ·   - 13) node_modules/@material-ui/core/index.js
-  ·       ·   ·   - 31) src/components/TextFieldValidate.tsx
-  ·       ·   ·   ·   - 13) node_modules/@material-ui/core/index.js
-  ·       ·   ·   ·   - 32) node_modules/formik/dist/formik.esm.js
-  ·       ·   ·   ·   - 28) node_modules/react/index.js
-  ·       ·   ·   - 33) node_modules/yup/es/index.js
-  ·       ·   ·   - 34) node_modules/mdi-material-ui/index.es.js
-  ·       ·   ·   - 32) node_modules/formik/dist/formik.esm.js
-  ·       ·   ·   - 25) node_modules/@material-ui/lab/index.js
-  ·       ·   ·   - 24) node_modules/react-router-dom/esm/react-router-dom.js
-  ·       ·   ·   - 28) node_modules/react/index.js
-  ·       ·   ·   - 19) src/types.ts
-  ·       ·   ·   - 35) src/components/ImagePicker.tsx
-  ·       ·   ·   ·   - 13) node_modules/@material-ui/core/index.js
-  ·       ·   ·   ·   - 34) node_modules/mdi-material-ui/index.es.js
-  ·       ·   ·   ·   - 28) node_modules/react/index.js
-  ·       ·   ·   ·   - 36) node_modules/promise-file-reader/PromiseFileReader.js
-  ·       ·   ·   - 37) src/sharedFunctions/index.tsx
-  ·       ·   ·   ·   - 38) node_modules/browser-image-compression/dist/browser-image-compression.mjs
-  ·       ·   ·   ·   - 28) node_modules/react/index.js
-  ·       ·   ·   ·   - 39) src/firebase.ts
-  ·       ·   ·   ·   ·   - 40) node_modules/firebase/app/dist/index.cjs.js
-  ·       ·   ·   ·   ·   - 41) node_modules/firebase/auth/dist/index.cjs.js
-  ·       ·   ·   ·   ·   - 42) node_modules/firebase/firestore/dist/index.cjs.js
-  ·       ·   ·   ·   ·   - 43) node_modules/firebase/storage/dist/index.cjs.js
-  ·       ·   ·   ·   - 43) node_modules/firebase/storage/dist/index.cjs.js
-  ·       ·   ·   - 39) src/firebase.ts
-  ·       ·   ·   - 41) node_modules/firebase/auth/dist/index.cjs.js
-  ·       ·   ·   - 42) node_modules/firebase/firestore/dist/index.cjs.js
-  ·       ·   - 24) node_modules/react-router-dom/esm/react-router-dom.js
-  ·       ·   - 44) src/views/Home.tsx
-  ·       ·   ·   - 13) node_modules/@material-ui/core/index.js
-  ·       ·   ·   - 28) node_modules/react/index.js
-  ·       ·   ·   - 36) node_modules/promise-file-reader/PromiseFileReader.js
-  ·       ·   ·   - 32) node_modules/formik/dist/formik.esm.js
-  ·       ·   ·   - 33) node_modules/yup/es/index.js
-  ·       ·   ·   - 45) src/hooks/index.ts
-  ·       ·   ·   ·   - 15) node_modules/react-redux/es/index.js
-  ·       ·   ·   ·   - 16) src/store.ts
-  ·       ·   ·   - 46) src/components/Post.tsx
-  ·       ·   ·   ·   - 33) node_modules/yup/es/index.js
-  ·       ·   ·   ·   - 13) node_modules/@material-ui/core/index.js
-  ·       ·   ·   ·   - 32) node_modules/formik/dist/formik.esm.js
-  ·       ·   ·   ·   - 34) node_modules/mdi-material-ui/index.es.js
-  ·       ·   ·   ·   - 47) src/components/Comment.tsx
-  ·       ·   ·   ·   ·   - 13) node_modules/@material-ui/core/index.js
-  ·       ·   ·   ·   ·   - 34) node_modules/mdi-material-ui/index.es.js
-  ·       ·   ·   ·   ·   - 45) src/hooks/index.ts
-  ·       ·   ·   ·   ·   - 48) src/hooks/useUserById.ts
-  ·       ·   ·   ·   ·   ·   - 28) node_modules/react/index.js
-  ·       ·   ·   ·   ·   ·   - 19) src/types.ts
-  ·       ·   ·   ·   ·   ·   - 39) src/firebase.ts
-  ·       ·   ·   ·   ·   ·   - 42) node_modules/firebase/firestore/dist/index.cjs.js
-  ·       ·   ·   ·   ·   - 19) src/types.ts
-  ·       ·   ·   ·   ·   - 49) src/components/UserAvatar.tsx
-  ·       ·   ·   ·   ·   ·   - 13) node_modules/@material-ui/core/index.js
-  ·       ·   ·   ·   ·   ·   - 50) node_modules/@material-ui/system/esm/index.js
-  ·       ·   ·   ·   ·   ·   - 24) node_modules/react-router-dom/esm/react-router-dom.js
-  ·       ·   ·   ·   ·   ·   - 48) src/hooks/useUserById.ts
-  ·       ·   ·   ·   ·   - 51) node_modules/date-fns/esm/index.js
-  ·       ·   ·   ·   ·   - 39) src/firebase.ts
-  ·       ·   ·   ·   ·   - 42) node_modules/firebase/firestore/dist/index.cjs.js
-  ·       ·   ·   ·   - 31) src/components/TextFieldValidate.tsx
-  ·       ·   ·   ·   - 28) node_modules/react/index.js
-  ·       ·   ·   ·   - 19) src/types.ts
-  ·       ·   ·   ·   - 52) node_modules/uuid/index.js
-  ·       ·   ·   ·   - 45) src/hooks/index.ts
-  ·       ·   ·   ·   - 49) src/components/UserAvatar.tsx
-  ·       ·   ·   ·   - 39) src/firebase.ts
-  ·       ·   ·   ·   - 42) node_modules/firebase/firestore/dist/index.cjs.js
-  ·       ·   ·   ·   - 48) src/hooks/useUserById.ts
-  ·       ·   ·   - 19) src/types.ts
-  ·       ·   ·   - 52) node_modules/uuid/index.js
-  ·       ·   ·   - 31) src/components/TextFieldValidate.tsx
-  ·       ·   ·   - 43) node_modules/firebase/storage/dist/index.cjs.js
-  ·       ·   ·   - 42) node_modules/firebase/firestore/dist/index.cjs.js
-  ·       ·   - 53) src/components/AppBar.tsx
-  ·       ·   ·   - 13) node_modules/@material-ui/core/index.js
-  ·       ·   ·   - 34) node_modules/mdi-material-ui/index.es.js
-  ·       ·   ·   - 24) node_modules/react-router-dom/esm/react-router-dom.js
-  ·       ·   ·   - 28) node_modules/react/index.js
-  ·       ·   ·   - 45) src/hooks/index.ts
-  ·       ·   ·   - 19) src/types.ts
-  ·       ·   ·   - 39) src/firebase.ts
-  ·       ·   ·   - 41) node_modules/firebase/auth/dist/index.cjs.js
-  ·       ·   - 54) src/views/SearchPage.tsx
-  ·       ·   ·   - 13) node_modules/@material-ui/core/index.js
-  ·       ·   ·   - 28) node_modules/react/index.js
-  ·       ·   ·   - 55) node_modules/meilisearch/dist/bundles/meilisearch.esm.js
-  ·       ·   ·   - 19) src/types.ts
-  ·       ·   ·   - 46) src/components/Post.tsx
-  ·       ·   - 28) node_modules/react/index.js
-  ·       ·   - 45) src/hooks/index.ts
-  ·       ·   - 19) src/types.ts
-  ·       ·   - 20) src/slices/postsSlice.ts
-  ·       ·   - 18) src/slices/commentsSlice.ts
-  ·       ·   - 23) src/slices/usersSlice.ts
-  ·       ·   - 21) src/slices/userListSlice.ts
-  ·       ·   - 56) src/views/UserPage.tsx
-  ·       ·   ·   - 13) node_modules/@material-ui/core/index.js
-  ·       ·   ·   - 51) node_modules/date-fns/esm/index.js
-  ·       ·   ·   - 34) node_modules/mdi-material-ui/index.es.js
-  ·       ·   ·   - 46) src/components/Post.tsx
-  ·       ·   ·   - 49) src/components/UserAvatar.tsx
-  ·       ·   ·   - 45) src/hooks/index.ts
-  ·       ·   ·   - 57) src/hooks/usePosts.ts
-  ·       ·   ·   ·   - 28) node_modules/react/index.js
-  ·       ·   ·   ·   - 19) src/types.ts
-  ·       ·   ·   ·   - 39) src/firebase.ts
-  ·       ·   ·   ·   - 42) node_modules/firebase/firestore/dist/index.cjs.js
-  ·       ·   ·   - 48) src/hooks/useUserById.ts
-  ·       ·   - 58) src/views/UserSettings.tsx
-  ·       ·   ·   - 13) node_modules/@material-ui/core/index.js
-  ·       ·   ·   - 25) node_modules/@material-ui/lab/index.js
-  ·       ·   ·   - 32) node_modules/formik/dist/formik.esm.js
-  ·       ·   ·   - 28) node_modules/react/index.js
-  ·       ·   ·   - 35) src/components/ImagePicker.tsx
-  ·       ·   ·   - 31) src/components/TextFieldValidate.tsx
-  ·       ·   ·   - 33) node_modules/yup/es/index.js
-  ·       ·   ·   - 45) src/hooks/index.ts
-  ·       ·   ·   - 19) src/types.ts
-  ·       ·   ·   - 37) src/sharedFunctions/index.tsx
-  ·       ·   ·   - 24) node_modules/react-router-dom/esm/react-router-dom.js
-  ·       ·   ·   - 39) src/firebase.ts
-  ·       ·   ·   - 42) node_modules/firebase/firestore/dist/index.cjs.js
-  ·       ·   ·   - 43) node_modules/firebase/storage/dist/index.cjs.js
-  ·       ·   - 42) node_modules/firebase/firestore/dist/index.cjs.js
-  ·       ·   - 39) src/firebase.ts
-  ·       - 45) src/hooks/index.ts
-  ·       - 22) src/slices/userSlice.ts
-  ·       - 19) src/types.ts
-  ·       - 30) src/views/Sign.tsx
-  ·       - 41) node_modules/firebase/auth/dist/index.cjs.js
-  ·       - 39) src/firebase.ts
-  ·       - 42) node_modules/firebase/firestore/dist/index.cjs.js
-  - 59) start.sh
-  - 60) storage.rules
-  - 61) tsconfig.json
-  - 62) yarn.lock
+  - 03) firebase-debug.log
+  - 04) firebase.json
+  - 05) firestore-debug.log
+  - 06) firestore.indexes.json
+  - 07) firestore.rules
+  - 08) ./functions
+  - 09) meilisearch
+  - 10) ./node_modules
+  - 11) package.json
+  - 12) ./public
+  - 13) runmeili.sh
+  - 14) src/index.tsx
+  ·   - 15) node_modules/@material-ui/core/index.js
+  ·   - 16) node_modules/react-dom/index.js
+  ·   - 17) node_modules/react-redux/es/index.js
+  ·   - 18) src/store.ts
+  ·   ·   - 19) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·   - 20) src/slices/commentsSlice.ts
+  ·   ·   ·   - 19) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·   ·   - 21) src/types.ts
+  ·   ·   - 22) src/slices/postsSlice.ts
+  ·   ·   ·   - 19) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·   ·   - 21) src/types.ts
+  ·   ·   - 23) src/slices/userListSlice.ts
+  ·   ·   ·   - 19) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·   - 24) src/slices/userSlice.ts
+  ·   ·   ·   - 19) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·   ·   - 21) src/types.ts
+  ·   ·   - 25) src/slices/usersSlice.ts
+  ·   ·       - 19) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·       - 21) src/types.ts
+  ·   - 26) node_modules/react-router-dom/esm/react-router-dom.js
+  ·   - 27) node_modules/@material-ui/lab/index.js
+  ·   - 28) node_modules/@material-ui/lab/AdapterDateFns/index.js
+  ·   - 29) src/AuthWrapper.tsx
+  ·       - 15) node_modules/@material-ui/core/index.js
+  ·       - 30) node_modules/react/index.js
+  ·       - 26) node_modules/react-router-dom/esm/react-router-dom.js
+  ·       - 31) src/App.tsx
+  ·       ·   - 27) node_modules/@material-ui/lab/index.js
+  ·       ·   - 28) node_modules/@material-ui/lab/AdapterDateFns/index.js
+  ·       ·   - 32) src/views/Sign.tsx
+  ·       ·   ·   - 15) node_modules/@material-ui/core/index.js
+  ·       ·   ·   - 33) src/components/TextFieldValidate.tsx
+  ·       ·   ·   ·   - 15) node_modules/@material-ui/core/index.js
+  ·       ·   ·   ·   - 34) node_modules/formik/dist/formik.esm.js
+  ·       ·   ·   ·   - 30) node_modules/react/index.js
+  ·       ·   ·   - 35) node_modules/yup/es/index.js
+  ·       ·   ·   - 36) node_modules/mdi-material-ui/index.es.js
+  ·       ·   ·   - 34) node_modules/formik/dist/formik.esm.js
+  ·       ·   ·   - 27) node_modules/@material-ui/lab/index.js
+  ·       ·   ·   - 26) node_modules/react-router-dom/esm/react-router-dom.js
+  ·       ·   ·   - 30) node_modules/react/index.js
+  ·       ·   ·   - 21) src/types.ts
+  ·       ·   ·   - 37) src/components/ImagePicker.tsx
+  ·       ·   ·   ·   - 15) node_modules/@material-ui/core/index.js
+  ·       ·   ·   ·   - 36) node_modules/mdi-material-ui/index.es.js
+  ·       ·   ·   ·   - 30) node_modules/react/index.js
+  ·       ·   ·   ·   - 38) node_modules/promise-file-reader/PromiseFileReader.js
+  ·       ·   ·   - 39) src/sharedFunctions/index.tsx
+  ·       ·   ·   ·   - 40) node_modules/browser-image-compression/dist/browser-image-compression.mjs
+  ·       ·   ·   ·   - 30) node_modules/react/index.js
+  ·       ·   ·   ·   - 41) src/firebase.ts
+  ·       ·   ·   ·   ·   - 42) node_modules/firebase/app/dist/index.cjs.js
+  ·       ·   ·   ·   ·   - 43) node_modules/firebase/auth/dist/index.cjs.js
+  ·       ·   ·   ·   ·   - 44) node_modules/firebase/firestore/dist/index.cjs.js
+  ·       ·   ·   ·   ·   - 45) node_modules/firebase/storage/dist/index.cjs.js
+  ·       ·   ·   ·   - 45) node_modules/firebase/storage/dist/index.cjs.js
+  ·       ·   ·   - 41) src/firebase.ts
+  ·       ·   ·   - 43) node_modules/firebase/auth/dist/index.cjs.js
+  ·       ·   ·   - 44) node_modules/firebase/firestore/dist/index.cjs.js
+  ·       ·   - 26) node_modules/react-router-dom/esm/react-router-dom.js
+  ·       ·   - 46) src/views/Home.tsx
+  ·       ·   ·   - 15) node_modules/@material-ui/core/index.js
+  ·       ·   ·   - 30) node_modules/react/index.js
+  ·       ·   ·   - 38) node_modules/promise-file-reader/PromiseFileReader.js
+  ·       ·   ·   - 34) node_modules/formik/dist/formik.esm.js
+  ·       ·   ·   - 35) node_modules/yup/es/index.js
+  ·       ·   ·   - 47) src/hooks/index.ts
+  ·       ·   ·   ·   - 17) node_modules/react-redux/es/index.js
+  ·       ·   ·   ·   - 18) src/store.ts
+  ·       ·   ·   - 48) src/components/Post.tsx
+  ·       ·   ·   ·   - 35) node_modules/yup/es/index.js
+  ·       ·   ·   ·   - 15) node_modules/@material-ui/core/index.js
+  ·       ·   ·   ·   - 34) node_modules/formik/dist/formik.esm.js
+  ·       ·   ·   ·   - 36) node_modules/mdi-material-ui/index.es.js
+  ·       ·   ·   ·   - 49) src/components/Comment.tsx
+  ·       ·   ·   ·   ·   - 15) node_modules/@material-ui/core/index.js
+  ·       ·   ·   ·   ·   - 36) node_modules/mdi-material-ui/index.es.js
+  ·       ·   ·   ·   ·   - 47) src/hooks/index.ts
+  ·       ·   ·   ·   ·   - 50) src/hooks/useUserById.ts
+  ·       ·   ·   ·   ·   ·   - 30) node_modules/react/index.js
+  ·       ·   ·   ·   ·   ·   - 21) src/types.ts
+  ·       ·   ·   ·   ·   ·   - 41) src/firebase.ts
+  ·       ·   ·   ·   ·   ·   - 44) node_modules/firebase/firestore/dist/index.cjs.js
+  ·       ·   ·   ·   ·   - 21) src/types.ts
+  ·       ·   ·   ·   ·   - 51) src/components/UserAvatar.tsx
+  ·       ·   ·   ·   ·   ·   - 15) node_modules/@material-ui/core/index.js
+  ·       ·   ·   ·   ·   ·   - 52) node_modules/@material-ui/system/esm/index.js
+  ·       ·   ·   ·   ·   ·   - 26) node_modules/react-router-dom/esm/react-router-dom.js
+  ·       ·   ·   ·   ·   ·   - 50) src/hooks/useUserById.ts
+  ·       ·   ·   ·   ·   - 53) node_modules/date-fns/esm/index.js
+  ·       ·   ·   ·   ·   - 41) src/firebase.ts
+  ·       ·   ·   ·   ·   - 44) node_modules/firebase/firestore/dist/index.cjs.js
+  ·       ·   ·   ·   - 33) src/components/TextFieldValidate.tsx
+  ·       ·   ·   ·   - 30) node_modules/react/index.js
+  ·       ·   ·   ·   - 21) src/types.ts
+  ·       ·   ·   ·   - 54) node_modules/uuid/index.js
+  ·       ·   ·   ·   - 47) src/hooks/index.ts
+  ·       ·   ·   ·   - 51) src/components/UserAvatar.tsx
+  ·       ·   ·   ·   - 41) src/firebase.ts
+  ·       ·   ·   ·   - 44) node_modules/firebase/firestore/dist/index.cjs.js
+  ·       ·   ·   ·   - 50) src/hooks/useUserById.ts
+  ·       ·   ·   - 21) src/types.ts
+  ·       ·   ·   - 54) node_modules/uuid/index.js
+  ·       ·   ·   - 33) src/components/TextFieldValidate.tsx
+  ·       ·   ·   - 45) node_modules/firebase/storage/dist/index.cjs.js
+  ·       ·   ·   - 44) node_modules/firebase/firestore/dist/index.cjs.js
+  ·       ·   - 55) src/components/AppBar.tsx
+  ·       ·   ·   - 15) node_modules/@material-ui/core/index.js
+  ·       ·   ·   - 36) node_modules/mdi-material-ui/index.es.js
+  ·       ·   ·   - 26) node_modules/react-router-dom/esm/react-router-dom.js
+  ·       ·   ·   - 30) node_modules/react/index.js
+  ·       ·   ·   - 47) src/hooks/index.ts
+  ·       ·   ·   - 21) src/types.ts
+  ·       ·   ·   - 41) src/firebase.ts
+  ·       ·   ·   - 43) node_modules/firebase/auth/dist/index.cjs.js
+  ·       ·   - 56) src/views/SearchPage.tsx
+  ·       ·   ·   - 15) node_modules/@material-ui/core/index.js
+  ·       ·   ·   - 30) node_modules/react/index.js
+  ·       ·   ·   - 57) node_modules/meilisearch/dist/bundles/meilisearch.esm.js
+  ·       ·   ·   - 21) src/types.ts
+  ·       ·   ·   - 48) src/components/Post.tsx
+  ·       ·   - 30) node_modules/react/index.js
+  ·       ·   - 47) src/hooks/index.ts
+  ·       ·   - 21) src/types.ts
+  ·       ·   - 22) src/slices/postsSlice.ts
+  ·       ·   - 20) src/slices/commentsSlice.ts
+  ·       ·   - 25) src/slices/usersSlice.ts
+  ·       ·   - 23) src/slices/userListSlice.ts
+  ·       ·   - 58) src/views/UserPage.tsx
+  ·       ·   ·   - 15) node_modules/@material-ui/core/index.js
+  ·       ·   ·   - 53) node_modules/date-fns/esm/index.js
+  ·       ·   ·   - 36) node_modules/mdi-material-ui/index.es.js
+  ·       ·   ·   - 48) src/components/Post.tsx
+  ·       ·   ·   - 51) src/components/UserAvatar.tsx
+  ·       ·   ·   - 59) src/hooks/usePosts.ts
+  ·       ·   ·   ·   - 30) node_modules/react/index.js
+  ·       ·   ·   ·   - 21) src/types.ts
+  ·       ·   ·   ·   - 41) src/firebase.ts
+  ·       ·   ·   ·   - 44) node_modules/firebase/firestore/dist/index.cjs.js
+  ·       ·   ·   - 50) src/hooks/useUserById.ts
+  ·       ·   - 60) src/views/UserSettings.tsx
+  ·       ·   ·   - 15) node_modules/@material-ui/core/index.js
+  ·       ·   ·   - 27) node_modules/@material-ui/lab/index.js
+  ·       ·   ·   - 34) node_modules/formik/dist/formik.esm.js
+  ·       ·   ·   - 30) node_modules/react/index.js
+  ·       ·   ·   - 37) src/components/ImagePicker.tsx
+  ·       ·   ·   - 33) src/components/TextFieldValidate.tsx
+  ·       ·   ·   - 35) node_modules/yup/es/index.js
+  ·       ·   ·   - 47) src/hooks/index.ts
+  ·       ·   ·   - 21) src/types.ts
+  ·       ·   ·   - 39) src/sharedFunctions/index.tsx
+  ·       ·   ·   - 26) node_modules/react-router-dom/esm/react-router-dom.js
+  ·       ·   ·   - 41) src/firebase.ts
+  ·       ·   ·   - 44) node_modules/firebase/firestore/dist/index.cjs.js
+  ·       ·   ·   - 45) node_modules/firebase/storage/dist/index.cjs.js
+  ·       ·   - 44) node_modules/firebase/firestore/dist/index.cjs.js
+  ·       ·   - 41) src/firebase.ts
+  ·       - 47) src/hooks/index.ts
+  ·       - 24) src/slices/userSlice.ts
+  ·       - 21) src/types.ts
+  ·       - 32) src/views/Sign.tsx
+  ·       - 43) node_modules/firebase/auth/dist/index.cjs.js
+  ·       - 41) src/firebase.ts
+  ·       - 44) node_modules/firebase/firestore/dist/index.cjs.js
+  - 61) start.sh
+  - 62) storage.rules
+  - 63) tsconfig.json
+  - 64) ui-debug.log
+  - 65) yarn.lock
 
 • Circular Dependencies
   ✅ Congratulations, no circular dependency were found in your project.
