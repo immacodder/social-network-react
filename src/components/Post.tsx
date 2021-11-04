@@ -1,4 +1,4 @@
-import * as Yup from 'yup'
+import * as Yup from "yup"
 import {
 	Box,
 	Button,
@@ -8,28 +8,23 @@ import {
 	CardHeader,
 	Container,
 	Divider,
+	Icon,
 	IconButton,
 	ImageList,
 	ImageListItem,
 	Stack,
 	Tooltip,
 	Typography,
-} from '@material-ui/core'
-import { Form, Formik } from 'formik'
-import {
-	ThumbDown,
-	ThumbUp,
-	Comment as CommentIcon,
-	Share,
-} from 'mdi-material-ui'
-import { Comment } from './Comment'
-import { TextFieldValidate } from './TextFieldValidate'
-import { useState } from 'react'
-import { CommentType, PostType, UserType } from '../types'
-import { v4 } from 'uuid'
-import { useAppSelector } from '../hooks'
-import { UserAvatar } from './UserAvatar'
-import { firebaseApp } from '../firebase'
+} from "@mui/material"
+import { Form, Formik } from "formik"
+import { Comment } from "./Comment"
+import { TextFieldValidate } from "./TextFieldValidate"
+import { useState } from "react"
+import { CommentType, PostType, UserType } from "../types"
+import { v4 } from "uuid"
+import { useAppSelector } from "../hooks"
+import { UserAvatarFetch } from "./UserAvatar"
+import { firebaseApp } from "../firebase"
 import {
 	getFirestore,
 	doc,
@@ -37,12 +32,16 @@ import {
 	arrayRemove,
 	arrayUnion,
 	setDoc,
-} from 'firebase/firestore'
-import { useUserById } from '../hooks/useUserById'
+} from "firebase/firestore"
+import { useUserById } from "../hooks/useUserById"
 
 const db = getFirestore(firebaseApp)
 
-export function Post(p: PostType) {
+interface Props extends PostType {
+	paddingNotNeeded?: true
+}
+
+export function Post(p: Props) {
 	const [isCommenting, setIsCommenting] = useState(false)
 	const currentUser = useAppSelector((s) => s.user.userState as UserType)
 	const postUser = useUserById(p.authorUid)
@@ -50,14 +49,14 @@ export function Post(p: PostType) {
 	const commentList = comments.filter((v) => v.parentPostUid === p.uid)
 
 	function onLike(isLike: boolean = true) {
-		const property = isLike ? 'likedBy' : 'dislikedBy'
+		const property = isLike ? "likedBy" : "dislikedBy"
 
 		if (p[property].find((v) => v === currentUser.uid)) return
 
 		const postRef = `posts/${p.uid}`
 
 		updateDoc(doc(db, postRef), {
-			[isLike ? 'dislikedBy' : 'likedBy']: arrayRemove(currentUser.uid),
+			[isLike ? "dislikedBy" : "likedBy"]: arrayRemove(currentUser.uid),
 		})
 
 		updateDoc(doc(db, postRef), { [property]: arrayUnion(currentUser.uid) })
@@ -66,13 +65,13 @@ export function Post(p: PostType) {
 	if (!postUser) return null
 
 	return (
-		<Container sx={{ mt: 2}}>
+		<Container sx={{ mt: 2 }}>
 			<Card elevation={4}>
 				<CardHeader
 					title={<Typography variant="subtitle1">{p.title}</Typography>}
 					subheader={`By ${postUser.firstName} ${postUser.secondName}`}
 					avatar={
-						<UserAvatar
+						<UserAvatarFetch
 							redirect
 							uid={postUser.uid}
 							sx={{ width: 48, height: 48 }}
@@ -85,7 +84,7 @@ export function Post(p: PostType) {
 
 				{!!p.imageUrls.length && (
 					<ImageList
-						variant={p.imageUrls.length > 4 ? 'masonry' : 'standard'}
+						variant={p.imageUrls.length > 4 ? "masonry" : "standard"}
 						cols={p.imageUrls.length === 1 ? 1 : 2}
 						gap={4}
 					>
@@ -98,30 +97,30 @@ export function Post(p: PostType) {
 				)}
 
 				<Divider />
-				<Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
+				<Box sx={{ display: "flex", justifyContent: "space-between", p: 1 }}>
 					<Stack direction="row">
-						<Stack direction="row" sx={{ alignItems: 'center' }}>
+						<Stack direction="row" sx={{ alignItems: "center" }}>
 							<Tooltip title="Like">
 								<IconButton
 									color={
-										p.likedBy.includes(currentUser.uid) ? 'primary' : 'default'
+										p.likedBy.includes(currentUser.uid) ? "primary" : "default"
 									}
 									onClick={() => onLike(true)}
 								>
-									<ThumbUp />
+									<Icon>thumb_up</Icon>
 								</IconButton>
 							</Tooltip>
 							<Typography>{p.likedBy.length}</Typography>
 						</Stack>
-						<Stack direction="row" sx={{ alignItems: 'center' }}>
+						<Stack direction="row" sx={{ alignItems: "center" }}>
 							<Tooltip title="Dislike">
 								<IconButton
 									color={
-										p.dislikedBy.includes(currentUser.uid) ? 'error' : 'default'
+										p.dislikedBy.includes(currentUser.uid) ? "error" : "default"
 									}
 									onClick={() => onLike(false)}
 								>
-									<ThumbDown />
+									<Icon>thumb_down</Icon>
 								</IconButton>
 							</Tooltip>
 							<Typography>{p.dislikedBy.length}</Typography>
@@ -131,12 +130,14 @@ export function Post(p: PostType) {
 					<Stack direction="row">
 						<Tooltip title="Share">
 							<IconButton>
-								<Share />
+								<Icon>share</Icon>
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Add Comment">
 							<IconButton onClick={() => setIsCommenting(!isCommenting)}>
-								<CommentIcon color={isCommenting ? 'primary' : undefined} />
+								<Icon color={isCommenting ? "primary" : undefined}>
+									comment-icon
+								</Icon>
 							</IconButton>
 						</Tooltip>
 					</Stack>
@@ -145,7 +146,7 @@ export function Post(p: PostType) {
 
 			<Box pt={2}>
 				<Formik
-					initialValues={{ commentBody: '' }}
+					initialValues={{ commentBody: "" }}
 					validationSchema={Yup.object({
 						commentBody: Yup.string().required().max(320),
 					})}
@@ -172,9 +173,9 @@ export function Post(p: PostType) {
 									onReplyClick={(user) => {
 										setTimeout(() =>
 											formik.setFieldValue(
-												'commentBody',
-												`${user.firstName} ${user.secondName}, `,
-											),
+												"commentBody",
+												`${user.firstName} ${user.secondName}, `
+											)
 										)
 										setIsCommenting(true)
 									}}
@@ -185,7 +186,7 @@ export function Post(p: PostType) {
 							{isCommenting && (
 								<Card elevation={4} sx={{ mt: 4 }}>
 									<CardHeader
-										sx={{ textAlign: 'left', pl: 2 }}
+										sx={{ textAlign: "left", pl: 2 }}
 										title={<Typography variant="h6">Add comment</Typography>}
 									/>
 									<CardContent>

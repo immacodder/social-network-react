@@ -9,7 +9,7 @@ import {
 	ImageList,
 	ImageListItem,
 	Stack,
-} from '@material-ui/core'
+} from '@mui/material'
 import React, { useRef, useState } from 'react'
 import { readAsDataURL } from 'promise-file-reader'
 import { Form, Formik } from 'formik'

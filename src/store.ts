@@ -1,9 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { commentsSlice } from './slices/commentsSlice'
-import { postSliceReducer } from './slices/postsSlice'
-import { userListSlice } from './slices/userListSlice'
-import { userSlice } from './slices/userSlice'
-import { usersSlice } from './slices/usersSlice'
+import { configureStore } from "@reduxjs/toolkit"
+import { commentsSlice } from "./slices/commentsSlice"
+import { HeaderSliceReducer } from "./slices/headerSlice"
+import { postSliceReducer } from "./slices/postsSlice"
+import { userListSlice } from "./slices/userListSlice"
+import { userSlice } from "./slices/userSlice"
+import { usersSlice } from "./slices/usersSlice"
 
 export const store = configureStore({
 	reducer: {

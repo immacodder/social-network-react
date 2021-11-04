@@ -1,0 +1,214 @@
+
+> react-app@0.1.0 start
+> dpdm ./* > dependenciesCheck.txt && dpdm ./* --warning false && BROWSER=none DISABLE_ESLINT_PLUGIN=true react-scripts start
+
+- Start analyzing dependencies...
+✔ [28/28] Analyze done!
+- Start analyzing dependencies...
+✔ [28/28] Analyze done!
+• Dependencies Tree
+  - 00) dependenciesCheck.txt
+  - 01) firebase.json
+  - 02) firestore.rules
+  - 03) ./functions
+  - 04) log.txt
+  - 05) ./node_modules
+  - 06) package.json
+  - 07) package-lock.json
+  - 08) ./public
+  - 09) README.md
+  - 10) runmeili.sh
+  - 11) src/index.tsx
+  ·   - 12) node_modules/@mui/material/index.js
+  ·   - 13) node_modules/react-dom/index.js
+  ·   - 14) node_modules/react-redux/es/index.js
+  ·   - 15) src/store.ts
+  ·   ·   - 16) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·   - 17) src/slices/commentsSlice.ts
+  ·   ·   ·   - 16) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·   ·   - 18) src/types.ts
+  ·   ·   - 19) src/slices/postsSlice.ts
+  ·   ·   ·   - 16) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·   ·   - 18) src/types.ts
+  ·   ·   - 20) src/slices/userListSlice.ts
+  ·   ·   ·   - 16) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·   - 21) src/slices/userSlice.ts
+  ·   ·   ·   - 16) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·   ·   - 18) src/types.ts
+  ·   ·   - 22) src/slices/usersSlice.ts
+  ·   ·       - 16) node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+  ·   ·       - 18) src/types.ts
+  ·   - 23) node_modules/react-router-dom/esm/react-router-dom.js
+  ·   - 24) node_modules/@mui/lab/index.js
+  ·   - 25) node_modules/@mui/lab/AdapterDateFns/index.js
+  ·   - 26) src/AuthWrapper.tsx
+  ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   - 27) node_modules/react/index.js
+  ·   ·   - 23) node_modules/react-router-dom/esm/react-router-dom.js
+  ·   ·   - 28) src/App.tsx
+  ·   ·   ·   - 24) node_modules/@mui/lab/index.js
+  ·   ·   ·   - 25) node_modules/@mui/lab/AdapterDateFns/index.js
+  ·   ·   ·   - 29) src/views/Sign.tsx
+  ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   - 30) src/components/TextFieldValidate.tsx
+  ·   ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   ·   - 31) node_modules/formik/dist/formik.esm.js
+  ·   ·   ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   ·   - 32) yup
+  ·   ·   ·   ·   - 31) node_modules/formik/dist/formik.esm.js
+  ·   ·   ·   ·   - 24) node_modules/@mui/lab/index.js
+  ·   ·   ·   ·   - 23) node_modules/react-router-dom/esm/react-router-dom.js
+  ·   ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   ·   - 18) src/types.ts
+  ·   ·   ·   ·   - 33) src/components/ImagePicker.tsx
+  ·   ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   ·   ·   - 34) node_modules/promise-file-reader/PromiseFileReader.js
+  ·   ·   ·   ·   - 35) src/sharedFunctions/index.tsx
+  ·   ·   ·   ·   ·   - 36) node_modules/browser-image-compression/dist/browser-image-compression.mjs
+  ·   ·   ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   ·   ·   - 37) src/firebase.ts
+  ·   ·   ·   ·   ·   ·   - 38) node_modules/firebase/app/dist/index.cjs.js
+  ·   ·   ·   ·   ·   ·   - 39) node_modules/firebase/auth/dist/index.cjs.js
+  ·   ·   ·   ·   ·   ·   - 40) node_modules/firebase/firestore/dist/index.cjs.js
+  ·   ·   ·   ·   ·   ·   - 41) node_modules/firebase/storage/dist/index.cjs.js
+  ·   ·   ·   ·   ·   - 41) node_modules/firebase/storage/dist/index.cjs.js
+  ·   ·   ·   ·   - 37) src/firebase.ts
+  ·   ·   ·   ·   - 39) node_modules/firebase/auth/dist/index.cjs.js
+  ·   ·   ·   ·   - 40) node_modules/firebase/firestore/dist/index.cjs.js
+  ·   ·   ·   - 23) node_modules/react-router-dom/esm/react-router-dom.js
+  ·   ·   ·   - 42) src/views/Home.tsx
+  ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   ·   - 34) node_modules/promise-file-reader/PromiseFileReader.js
+  ·   ·   ·   ·   - 31) node_modules/formik/dist/formik.esm.js
+  ·   ·   ·   ·   - 32) yup
+  ·   ·   ·   ·   - 43) src/hooks/index.ts
+  ·   ·   ·   ·   ·   - 14) node_modules/react-redux/es/index.js
+  ·   ·   ·   ·   ·   - 15) src/store.ts
+  ·   ·   ·   ·   - 44) src/components/Post.tsx
+  ·   ·   ·   ·   ·   - 32) yup
+  ·   ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   ·   - 31) node_modules/formik/dist/formik.esm.js
+  ·   ·   ·   ·   ·   - 45) src/components/Comment.tsx
+  ·   ·   ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   ·   ·   - 43) src/hooks/index.ts
+  ·   ·   ·   ·   ·   ·   - 46) src/hooks/useUserById.ts
+  ·   ·   ·   ·   ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   ·   ·   ·   ·   - 18) src/types.ts
+  ·   ·   ·   ·   ·   ·   ·   - 37) src/firebase.ts
+  ·   ·   ·   ·   ·   ·   ·   - 40) node_modules/firebase/firestore/dist/index.cjs.js
+  ·   ·   ·   ·   ·   ·   - 18) src/types.ts
+  ·   ·   ·   ·   ·   ·   - 47) src/components/UserAvatar.tsx
+  ·   ·   ·   ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   ·   ·   ·   - 48) node_modules/@mui/system/esm/index.js
+  ·   ·   ·   ·   ·   ·   ·   - 23) node_modules/react-router-dom/esm/react-router-dom.js
+  ·   ·   ·   ·   ·   ·   ·   - 46) src/hooks/useUserById.ts
+  ·   ·   ·   ·   ·   ·   - 49) node_modules/date-fns/esm/index.js
+  ·   ·   ·   ·   ·   ·   - 37) src/firebase.ts
+  ·   ·   ·   ·   ·   ·   - 40) node_modules/firebase/firestore/dist/index.cjs.js
+  ·   ·   ·   ·   ·   - 30) src/components/TextFieldValidate.tsx
+  ·   ·   ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   ·   ·   - 18) src/types.ts
+  ·   ·   ·   ·   ·   - 50) node_modules/uuid/dist/esm-node/index.js
+  ·   ·   ·   ·   ·   - 43) src/hooks/index.ts
+  ·   ·   ·   ·   ·   - 47) src/components/UserAvatar.tsx
+  ·   ·   ·   ·   ·   - 37) src/firebase.ts
+  ·   ·   ·   ·   ·   - 40) node_modules/firebase/firestore/dist/index.cjs.js
+  ·   ·   ·   ·   ·   - 46) src/hooks/useUserById.ts
+  ·   ·   ·   ·   - 18) src/types.ts
+  ·   ·   ·   ·   - 50) node_modules/uuid/dist/esm-node/index.js
+  ·   ·   ·   ·   - 30) src/components/TextFieldValidate.tsx
+  ·   ·   ·   ·   - 41) node_modules/firebase/storage/dist/index.cjs.js
+  ·   ·   ·   ·   - 40) node_modules/firebase/firestore/dist/index.cjs.js
+  ·   ·   ·   - 51) src/components/AppBar.tsx
+  ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   - 23) node_modules/react-router-dom/esm/react-router-dom.js
+  ·   ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   ·   - 43) src/hooks/index.ts
+  ·   ·   ·   ·   - 18) src/types.ts
+  ·   ·   ·   ·   - 37) src/firebase.ts
+  ·   ·   ·   ·   - 39) node_modules/firebase/auth/dist/index.cjs.js
+  ·   ·   ·   - 52) src/views/SearchPage.tsx
+  ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   ·   - 53) node_modules/meilisearch/dist/bundles/meilisearch.esm.js
+  ·   ·   ·   ·   - 18) src/types.ts
+  ·   ·   ·   ·   - 44) src/components/Post.tsx
+  ·   ·   ·   ·   - 54) src/components/UserCard.tsx
+  ·   ·   ·   ·       - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·       - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·       - 46) src/hooks/useUserById.ts
+  ·   ·   ·   ·       - 18) src/types.ts
+  ·   ·   ·   ·       - 47) src/components/UserAvatar.tsx
+  ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   - 43) src/hooks/index.ts
+  ·   ·   ·   - 18) src/types.ts
+  ·   ·   ·   - 19) src/slices/postsSlice.ts
+  ·   ·   ·   - 17) src/slices/commentsSlice.ts
+  ·   ·   ·   - 22) src/slices/usersSlice.ts
+  ·   ·   ·   - 20) src/slices/userListSlice.ts
+  ·   ·   ·   - 55) src/views/UserPage.tsx
+  ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   - 49) node_modules/date-fns/esm/index.js
+  ·   ·   ·   ·   - 44) src/components/Post.tsx
+  ·   ·   ·   ·   - 47) src/components/UserAvatar.tsx
+  ·   ·   ·   ·   - 56) src/hooks/usePosts.ts
+  ·   ·   ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   ·   ·   - 18) src/types.ts
+  ·   ·   ·   ·   ·   - 37) src/firebase.ts
+  ·   ·   ·   ·   ·   - 40) node_modules/firebase/firestore/dist/index.cjs.js
+  ·   ·   ·   ·   - 46) src/hooks/useUserById.ts
+  ·   ·   ·   - 57) src/views/UserSettings.tsx
+  ·   ·   ·   ·   - 12) node_modules/@mui/material/index.js
+  ·   ·   ·   ·   - 24) node_modules/@mui/lab/index.js
+  ·   ·   ·   ·   - 31) node_modules/formik/dist/formik.esm.js
+  ·   ·   ·   ·   - 27) node_modules/react/index.js
+  ·   ·   ·   ·   - 33) src/components/ImagePicker.tsx
+  ·   ·   ·   ·   - 30) src/components/TextFieldValidate.tsx
+  ·   ·   ·   ·   - 32) yup
+  ·   ·   ·   ·   - 43) src/hooks/index.ts
+  ·   ·   ·   ·   - 18) src/types.ts
+  ·   ·   ·   ·   - 35) src/sharedFunctions/index.tsx
+  ·   ·   ·   ·   - 23) node_modules/react-router-dom/esm/react-router-dom.js
+  ·   ·   ·   ·   - 37) src/firebase.ts
+  ·   ·   ·   ·   - 40) node_modules/firebase/firestore/dist/index.cjs.js
+  ·   ·   ·   ·   - 41) node_modules/firebase/storage/dist/index.cjs.js
+  ·   ·   ·   - 40) node_modules/firebase/firestore/dist/index.cjs.js
+  ·   ·   ·   - 37) src/firebase.ts
+  ·   ·   - 43) src/hooks/index.ts
+  ·   ·   - 21) src/slices/userSlice.ts
+  ·   ·   - 18) src/types.ts
+  ·   ·   - 29) src/views/Sign.tsx
+  ·   ·   - 39) node_modules/firebase/auth/dist/index.cjs.js
+  ·   ·   - 37) src/firebase.ts
+  ·   ·   - 40) node_modules/firebase/firestore/dist/index.cjs.js
+  ·   - 58) node_modules/@emotion/react/dist/emotion-react.esm.js
+  - 59) start.sh
+  - 60) storage.rules
+  - 61) tsconfig.json
+
+• Circular Dependencies
+  ✅ Congratulations, no circular dependency were found in your project.
+
+[34mℹ[39m [90m｢wds｣[39m: Project is running at http://192.168.31.51/
+[34mℹ[39m [90m｢wds｣[39m: webpack output is served from 
+[34mℹ[39m [90m｢wds｣[39m: Content not from webpack is served from /home/immacodder/Documents/webDev/social-network-react/public
+[34mℹ[39m [90m｢wds｣[39m: 404s will fallback to /
+Starting the development server...
+
+Failed to compile.
+
+./src/components/Post.tsx
+Module not found: Can't resolve 'yup' in '/home/immacodder/Documents/webDev/social-network-react/src/components'
+/home/immacodder/Documents/webDev/social-network-react/node_modules/react-scripts/scripts/start.js:19
+  throw err;
+  ^
+
+[Error: ENOENT: no such file or directory, stat '/media'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/media'
+}

@@ -1,11 +1,12 @@
-import { CssBaseline } from '@material-ui/core'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { store } from './store'
-import { BrowserRouter as Router } from 'react-router-dom'
-import { LocalizationProvider } from '@material-ui/lab'
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
-import { AuthWrapper } from './AuthWrapper'
+import { createTheme, CssBaseline } from "@mui/material"
+import ReactDOM from "react-dom"
+import { Provider } from "react-redux"
+import { store } from "./store"
+import { BrowserRouter as Router } from "react-router-dom"
+import { LocalizationProvider } from "@mui/lab"
+import AdapterDateFns from "@mui/lab/AdapterDateFns"
+import { AuthWrapper } from "./AuthWrapper"
+import { ThemeProvider } from "@emotion/react"
 
 ReactDOM.render(
 	<Provider store={store}>
@@ -17,5 +18,5 @@ ReactDOM.render(
 			</LocalizationProvider>
 		</CssBaseline>
 	</Provider>,
-	document.querySelector('#root'),
+	document.querySelector("#root")
 )

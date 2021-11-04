@@ -1,28 +1,36 @@
-import { Avatar } from '@material-ui/core'
-import { SxProps, Theme } from '@material-ui/system'
-import { Link } from 'react-router-dom'
-import { useUserById } from '../hooks/useUserById'
+import { Avatar } from "@mui/material"
+import { SxProps, Theme } from "@mui/system"
+import { Link } from "react-router-dom"
+import { useUserById } from "../hooks/useUserById"
+import { UserType } from "../types"
 
-interface Props {
-	sx?: SxProps<Theme>
-	uid: string
+interface baseProps {
 	redirect?: true
+	sx?: SxProps<Theme>
 }
 
-export function UserAvatar(p: Props) {
-	const user = useUserById(p.uid)
-	if (!user) return null
+function UserAvatar(p: { user: UserType } & baseProps) {
 	const avatar = (
-		<Avatar sx={p.sx} src={user.profileImage ?? undefined}>
-			{`${user.firstName[0]}${user.secondName[0]}`}
+		<Avatar sx={p.sx} src={p.user.profileImage ?? undefined}>
+			{`${p.user.firstName[0]}${p.user.secondName[0]}`}
 		</Avatar>
 	)
 
 	if (p.redirect)
 		return (
-			<Link to={`/user/${p.uid}`} style={{ textDecoration: 'none' }}>
+			<Link to={`/user/${p.user.uid}`} style={{ textDecoration: "none" }}>
 				{avatar}
 			</Link>
 		)
 	else return avatar
+}
+export function UserAvatarFetch(p: { uid: string } & baseProps) {
+	const user = useUserById(p.uid)
+	if (!user) return <Avatar sx={p.sx}></Avatar>
+
+	return <UserAvatar user={user} {...p} />
+}
+
+export function UserAvatarRender(p: { user: UserType } & baseProps) {
+	return <UserAvatar {...p} />
 }

@@ -1,35 +1,64 @@
-import { LocalizationProvider } from '@material-ui/lab'
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
-import { SignWrapper } from './views/Sign'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { Home } from './views/Home'
-import { AppBarComponent } from './components/AppBar'
-import { SearchPage } from './views/SearchPage'
-import { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from './hooks'
-import { CommentType, PostType, UserType } from './types'
-import { setPost } from './slices/postsSlice'
-import { setComment } from './slices/commentsSlice'
-import { addUser } from './slices/usersSlice'
-import { addUserUid } from './slices/userListSlice'
-import { UserPage } from './views/UserPage'
-import { UserSettings } from './views/UserSettings'
+import { LocalizationProvider } from "@mui/lab"
+import AdapterDateFns from "@mui/lab/AdapterDateFns"
+import { SignWrapper } from "./views/Sign"
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	useLocation,
+} from "react-router-dom"
+import { Home } from "./views/Home"
+import { AppBarComponent } from "./components/AppBar"
+import { SearchPage } from "./views/SearchPage"
+import { useEffect, useState } from "react"
+import { useAppDispatch, useAppSelector } from "./hooks"
+import { CommentType, PostType, UserType } from "./types"
+import { setPost } from "./slices/postsSlice"
+import { setComment } from "./slices/commentsSlice"
+import { addUser } from "./slices/usersSlice"
+import { addUserUid } from "./slices/userListSlice"
+import { UserPage } from "./views/UserPage"
+import { UserSettings } from "./views/UserSettings"
 import {
 	getFirestore,
 	getDoc,
 	doc,
 	collection,
 	onSnapshot,
-} from 'firebase/firestore'
-import { firebaseApp } from './firebase'
+} from "firebase/firestore"
+import { firebaseApp } from "./firebase"
+import { Chat } from "./views/Chat"
+import { Friends } from "./views/FriendsList"
+import { Messanger } from "./views/Messanger"
+// for testing purposes
+import "./testFirbastore"
+import { setUser } from "./slices/userSlice"
 
 const db = getFirestore(firebaseApp)
 
 export function App() {
 	const dispatch = useAppDispatch()
+	const [isAppbarShown, setIsAppbarShown] = useState(false)
 	const userList = useAppSelector((s) => s.userList)
 	const users = useAppSelector((s) => s.users)
-	const user = useAppSelector((s) => s.user.userState as UserType)
+	const currentUser = useAppSelector((s) => s.user.userState as UserType)
+	const { pathname } = useLocation()
+
+	// get rid of the appbar when it is not needed
+	useEffect(() => {
+		if (/messanger\/[0-9a-zA-Z-]+/.test(pathname)) {
+			setIsAppbarShown(false)
+		} else setIsAppbarShown(true)
+	}, [pathname])
+
+	// watch for user
+	useEffect(() => {
+		const ref = doc(db, `users/${currentUser.uid}`)
+		const unsub = onSnapshot(ref, (snap) => {
+			dispatch(setUser(snap.data() as UserType))
+		})
+		return unsub
+	}, [currentUser.uid, dispatch])
 
 	useEffect(() => {
 		const promises = userList.map(async (uid) => {
@@ -75,33 +104,44 @@ export function App() {
 
 	return (
 		<LocalizationProvider dateAdapter={AdapterDateFns}>
-			<Router>
-				<AppBarComponent />
-				<Switch>
-					<Route
-						path="/user/:id"
-						render={({ match }) => <UserPage uid={match.params.id} />}
-					/>
-					<Route path="/user">
-						<UserPage uid={user.uid} />
-					</Route>
-					<Route path="/usersettings">
-						<UserSettings />
-					</Route>
-					<Route path="/signup">
-						<SignWrapper isSignIn={false} />
-					</Route>
-					<Route path="/signin">
-						<SignWrapper isSignIn={true} />
-					</Route>
-					<Route path="/searchpage">
-						<SearchPage />
-					</Route>
-					<Route path="/">
-						<Home />
-					</Route>
-				</Switch>
-			</Router>
+			{isAppbarShown && <AppBarComponent />}
+			<Switch>
+				<Route
+					path="/messanger/:messageRoomId"
+					exact
+					render={({ match }) => (
+						<Chat messangerRoomId={match.params.messageRoomId} />
+					)}
+				/>
+				<Route path="/messanger">
+					<Messanger />
+				</Route>
+				<Route path="/friends">
+					<Friends />
+				</Route>
+				<Route
+					path="/user/:id"
+					render={({ match }) => <UserPage uid={match.params.id} />}
+				/>
+				<Route path="/user">
+					<UserPage isCurrentUser uid={currentUser.uid} />
+				</Route>
+				<Route path="/usersettings">
+					<UserSettings />
+				</Route>
+				<Route path="/signup">
+					<SignWrapper isSignIn={false} />
+				</Route>
+				<Route path="/signin">
+					<SignWrapper isSignIn={true} />
+				</Route>
+				<Route path="/searchpage">
+					<SearchPage />
+				</Route>
+				<Route path="/">
+					<Home />
+				</Route>
+			</Switch>
 		</LocalizationProvider>
 	)
 }

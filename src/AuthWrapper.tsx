@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from '@material-ui/core'
+import { Box, CircularProgress } from '@mui/material'
 import { useEffect } from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { App } from './App'

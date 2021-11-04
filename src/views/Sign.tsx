@@ -5,20 +5,21 @@ import {
 	CardHeader,
 	Container,
 	Divider,
+	Icon,
 	Stack,
+	SvgIcon,
 	TextField,
-} from '@material-ui/core'
-import { TextFieldValidate } from '../components/TextFieldValidate'
-import * as yup from 'yup'
-import { Facebook, Google } from 'mdi-material-ui'
-import { Formik, Form, useFormikContext } from 'formik'
-import { DatePicker } from '@material-ui/lab'
-import { useHistory } from 'react-router-dom'
-import React, { useEffect, useRef, useState } from 'react'
-import { UserType } from '../types'
-import { ImagePicker } from '../components/ImagePicker'
-import { putProfileImageInStorage } from '../sharedFunctions'
-import { firebaseApp } from '../firebase'
+} from "@mui/material"
+import { TextFieldValidate } from "../components/TextFieldValidate"
+import * as yup from "yup"
+import { Formik, Form, useFormikContext } from "formik"
+import { DatePicker } from "@mui/lab"
+import { useHistory } from "react-router-dom"
+import React, { useEffect, useRef, useState } from "react"
+import { UserType } from "../types"
+import { ImagePicker } from "../components/ImagePicker"
+import { putProfileImageInStorage } from "../sharedFunctions"
+import { firebaseApp } from "../firebase"
 import {
 	getAuth,
 	User,
@@ -27,37 +28,40 @@ import {
 	signInWithPopup,
 	onAuthStateChanged,
 	GoogleAuthProvider,
-} from 'firebase/auth'
-import { getFirestore, doc, setDoc } from 'firebase/firestore'
+} from "firebase/auth"
+import { getFirestore, doc, setDoc } from "firebase/firestore"
+import { ReactComponent as GoogleIcon } from "../Icons/google.svg"
 
 const auth = getAuth(firebaseApp)
 const db = getFirestore(firebaseApp)
 
 const formValues = {
-	email: '',
-	password: '',
-	passwordRepeat: '',
-	firstName: '',
-	secondName: '',
-	biography: '',
-}
-interface Props {
-	isSignIn: boolean
+	email: "",
+	password: "",
+	passwordRepeat: "",
+	firstName: "",
+	secondName: "",
+	biography: "",
 }
 
 type inputRef = React.RefObject<HTMLInputElement>
 type push = (path: string, state?: unknown) => void
+
+interface Props {
+	isSignIn: boolean
+}
 
 export function SignWrapper({ isSignIn }: Props) {
 	const inputRef = useRef<HTMLInputElement>(null)
 	const [date, setDate] = useState(new Date())
 	const { push } = useHistory()
 	const [userFromProvider, setUserFromProvider] = useState<null | User>(null)
+
 	return (
 		<Formik
 			initialValues={formValues}
 			validationSchema={yup.object({
-				email: yup.string().required().email('Invalid email address'),
+				email: yup.string().required().email("Invalid email address"),
 				password: yup.string().required().min(8),
 				...(!isSignIn && {
 					passwordRepeat: yup.string().required().min(8),
@@ -89,7 +93,7 @@ async function onSignUp(
 	inputRef: inputRef,
 	push: push,
 	date: Date,
-	userFromProvider?: User,
+	userFromProvider?: User
 ) {
 	let user: User
 	if (!userFromProvider) {
@@ -104,23 +108,24 @@ async function onSignUp(
 		secondName: v.secondName,
 		uid: user.uid,
 		profileImage: null,
+		friendList: [],
 	}
 	if (userFromProvider?.photoURL && !inputRef.current?.files![0]) {
 		userDetails.profileImage = userFromProvider.photoURL
 	} else {
 		userDetails.profileImage = await putProfileImageInStorage(
 			inputRef,
-			user.uid,
+			user.uid
 		)
 	}
 	await setDoc(doc(db, `users/${user.uid}`), userDetails)
-	push('/')
+	push("/")
 	location.reload()
 }
 
 async function onSignIn(v: typeof formValues, push: push) {
 	signInWithEmailAndPassword(auth, v.email, v.password)
-	push('/')
+	push("/")
 }
 
 interface SignProps {
@@ -141,17 +146,19 @@ function Sign({
 	userFromProvider,
 }: SignProps) {
 	const { push } = useHistory()
-	const term = `Sign ${isSignIn ? 'in' : 'up'}`
+	const term = `Sign ${isSignIn ? "in" : "up"}`
 	const { setFieldValue } = useFormikContext()
 
 	useEffect(() => {
 		const unsub = onAuthStateChanged(auth, (user) => {
 			if (!user) return null
-			const userName = user.displayName?.split(' ')
+			const userName = user.displayName?.split(" ")
 			setUserFromProvider(user as User)
-			setFieldValue('email', user.email)
-			userName && setFieldValue('firstName', userName[0])
-			userName && setFieldValue('secondName', userName[1])
+			setFieldValue("email", user.email)
+			if (userName) {
+				setFieldValue("firstName", userName[0])
+				setFieldValue("secondName", userName[1])
+			}
 		})
 		return unsub
 	}, [setFieldValue, inputRef, setUserFromProvider])
@@ -160,10 +167,10 @@ function Sign({
 		const googleProvider = new GoogleAuthProvider()
 		try {
 			await signInWithPopup(auth, googleProvider)
-			push('/signup')
+			push("/signup")
 		} catch (e) {
 			console.error(e)
-			push('/signup')
+			push("/signup")
 			location.reload()
 		}
 	}
@@ -174,7 +181,7 @@ function Sign({
 					<CardHeader
 						sx={{
 							my: 2,
-							textAlign: 'center',
+							textAlign: "center",
 						}}
 						title={term}
 					/>
@@ -192,6 +199,7 @@ function Sign({
 										onChange={(date) => setDate(date!)}
 									/>
 									<ImagePicker
+										title="Pick a profile image"
 										src={userFromProvider?.photoURL ?? undefined}
 										inputRef={inputRef}
 									/>
@@ -235,18 +243,21 @@ function Sign({
 							fullWidth
 							sx={{ mb: 2 }}
 						>
-							{term} with Google <Google sx={{ ml: 1 }} />
+							{term} with Google{" "}
+							<SvgIcon sx={{ ml: 1 }}>
+								<GoogleIcon />
+							</SvgIcon>
 						</Button>
 						<Button variant="outlined" fullWidth sx={{ mb: 2 }}>
 							{term} with Facebook
-							<Facebook sx={{ ml: 1 }} />
+							<Icon sx={{ ml: 1 }}>facebook</Icon>
 						</Button>
 						<Button
 							variant="text"
 							color="secondary"
-							onClick={() => push(`sign${!isSignIn ? 'in' : 'up'}`)}
+							onClick={() => push(`sign${!isSignIn ? "in" : "up"}`)}
 						>
-							{!isSignIn ? 'Sign In' : 'Sign Up'} instead
+							{!isSignIn ? "Sign In" : "Sign Up"} instead
 						</Button>
 					</Stack>
 				</Card>

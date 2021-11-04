@@ -9,6 +9,11 @@
 		"plugin:react-hooks/recommended",
 		"prettier"
 	],
+	"settings": {
+		"react": {
+			"version": "detect"
+		}
+	},
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"ecmaFeatures": {
@@ -23,7 +28,9 @@
 		"no-use-before-define": "off",
 		"@typescript-eslint/no-use-before-define": ["off"],
 		"react/react-in-jsx-scope": "off",
-		"no-debugger": "off"
+		"no-debugger": "off",
+		"no-unused-vars": "warn",
+		"react/no-unescaped-entities": 0
 	},
 	"globals": {
 		"JSX": true

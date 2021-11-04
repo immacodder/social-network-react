@@ -6,21 +6,21 @@ import {
 	Tooltip,
 	Stack,
 	Typography,
-} from '@material-ui/core'
-import { ThumbUp, ThumbDown, Reply } from 'mdi-material-ui'
-import { useAppSelector } from '../hooks'
-import { useUserById } from '../hooks/useUserById'
-import { CommentType, UserType } from '../types'
-import { UserAvatar } from './UserAvatar'
-import { formatDistance } from 'date-fns'
-import { firebaseApp } from '../firebase'
+	Icon,
+} from "@mui/material"
+import { useAppSelector } from "../hooks"
+import { useUserById } from "../hooks/useUserById"
+import { CommentType, UserType } from "../types"
+import { UserAvatarFetch } from "./UserAvatar"
+import { formatDistance } from "date-fns"
+import { firebaseApp } from "../firebase"
 import {
 	getFirestore,
 	doc,
 	updateDoc,
 	arrayRemove,
 	arrayUnion,
-} from 'firebase/firestore'
+} from "firebase/firestore"
 
 const db = getFirestore(firebaseApp)
 
@@ -35,14 +35,14 @@ export function Comment(p: Props) {
 	if (!user) return null
 
 	function onLike(isLike: boolean = true) {
-		const property = isLike ? 'likedBy' : 'dislikedBy'
+		const property = isLike ? "likedBy" : "dislikedBy"
 
 		if (p[property].find((v) => v === selfUser.uid)) return
 
 		const commentRef = `comments/${p.uid}`
 
 		updateDoc(doc(db, commentRef), {
-			[isLike ? 'dislikedBy' : 'likedBy']: arrayRemove(selfUser.uid),
+			[isLike ? "dislikedBy" : "likedBy"]: arrayRemove(selfUser.uid),
 		})
 
 		updateDoc(doc(db, commentRef), {
@@ -52,16 +52,16 @@ export function Comment(p: Props) {
 
 	return (
 		<Box display="flex" alignItems="flex-start" mb={2} justifyContent="stretch">
-			<UserAvatar
+			<UserAvatarFetch
 				redirect
 				uid={p.authorUid}
-				sx={{ width: '48px', height: '48px' }}
+				sx={{ width: "48px", height: "48px" }}
 			/>
 			<Paper
-				sx={{ ml: 1, p: 2, pb: 1, width: '100%', borderRadius: '16px' }}
+				sx={{ ml: 1, p: 2, pb: 1, width: "100%", borderRadius: "16px" }}
 				elevation={4}
 			>
-				<Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+				<Box sx={{ display: "flex", justifyContent: "space-between" }}>
 					<Typography variant="caption">{`${user.firstName} ${user.secondName}`}</Typography>
 					<Typography variant="caption">
 						{formatDistance(p.createdAt, new Date(), {
@@ -76,37 +76,37 @@ export function Comment(p: Props) {
 				<Divider />
 				<Box display="flex" justifyContent="space-between">
 					<Stack direction="row">
-						<Stack direction="row" sx={{ alignItems: 'center' }}>
+						<Stack direction="row" sx={{ alignItems: "center" }}>
 							<Tooltip
 								title="Like"
 								color={
 									p.likedBy.find((v) => v === selfUser.uid)
-										? 'primary'
-										: 'default'
+										? "primary"
+										: "default"
 								}
 							>
 								<IconButton
 									onClick={() => onLike(true)}
 									edge="start"
-									sx={{ pl: '12px' }}
+									sx={{ pl: "12px" }}
 								>
-									<ThumbUp />
+									<Icon>thumb_up</Icon>
 								</IconButton>
 							</Tooltip>
 							<Typography>{p.likedBy.length}</Typography>
 						</Stack>
-						<Stack direction="row" sx={{ alignItems: 'center' }}>
+						<Stack direction="row" sx={{ alignItems: "center" }}>
 							<Tooltip
 								onClick={() => onLike(false)}
 								title="Dislike"
 								color={
 									p.dislikedBy.find((v) => v === selfUser.uid)
-										? 'error'
-										: 'default'
+										? "error"
+										: "default"
 								}
 							>
 								<IconButton>
-									<ThumbDown />
+									<Icon>thumb_down</Icon>
 								</IconButton>
 							</Tooltip>
 							<Typography>{p.dislikedBy.length}</Typography>
@@ -115,7 +115,7 @@ export function Comment(p: Props) {
 					<Stack direction="row">
 						<Tooltip title="Reply">
 							<IconButton onClick={() => p.onReplyClick(user)}>
-								<Reply />
+								<Icon>reply</Icon>
 							</IconButton>
 						</Tooltip>
 					</Stack>

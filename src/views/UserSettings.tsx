@@ -8,20 +8,20 @@ import {
 	Button,
 	CardActions,
 	LinearProgress,
-} from '@material-ui/core'
-import { DatePicker } from '@material-ui/lab'
-import { Form, Formik } from 'formik'
-import { useRef, useState } from 'react'
-import { ImagePicker } from '../components/ImagePicker'
-import { TextFieldValidate } from '../components/TextFieldValidate'
-import * as yup from 'yup'
-import { useAppSelector } from '../hooks'
-import { UserType } from '../types'
-import { putProfileImageInStorage } from '../sharedFunctions'
-import { useHistory } from 'react-router-dom'
-import { firebaseApp } from '../firebase'
-import { getFirestore, doc, updateDoc, setDoc } from 'firebase/firestore'
-import { getStorage, ref, deleteObject } from 'firebase/storage'
+} from "@mui/material"
+import { DatePicker } from "@mui/lab"
+import { Form, Formik } from "formik"
+import { useRef, useState } from "react"
+import { ImagePicker } from "../components/ImagePicker"
+import { TextFieldValidate } from "../components/TextFieldValidate"
+import * as yup from "yup"
+import { useAppSelector } from "../hooks"
+import { UserType } from "../types"
+import { putProfileImageInStorage } from "../sharedFunctions"
+import { useHistory } from "react-router-dom"
+import { firebaseApp } from "../firebase"
+import { getFirestore, doc, updateDoc, setDoc } from "firebase/firestore"
+import { getStorage, ref, deleteObject } from "firebase/storage"
 
 const storage = getStorage(firebaseApp)
 const db = getFirestore(firebaseApp)
@@ -48,6 +48,7 @@ export function UserSettings() {
 			secondName: v.secondName,
 			uid: user.uid,
 			profileImage: user.profileImage,
+			friendList: [],
 		}
 
 		setProgress(true)
@@ -63,14 +64,14 @@ export function UserSettings() {
 			} else {
 				userDetails.profileImage = await putProfileImageInStorage(
 					inputRef,
-					user.uid,
+					user.uid
 				)
 			}
 		}
 
 		await setDoc(doc(db, `users/${user.uid}`), userDetails)
 		setProgress(false)
-		push('/user')
+		push("/user")
 		location.reload()
 	}
 
@@ -91,7 +92,7 @@ export function UserSettings() {
 							<CardHeader
 								sx={{
 									my: 2,
-									textAlign: 'center',
+									textAlign: "center",
 								}}
 								title="User Settings"
 							/>
@@ -108,6 +109,7 @@ export function UserSettings() {
 									<ImagePicker
 										inputRef={inputRef}
 										src={user.profileImage ?? undefined}
+										title={"Pick a profile image"}
 										onChange={() => setIsImageTouched(true)}
 									/>
 									<TextFieldValidate
