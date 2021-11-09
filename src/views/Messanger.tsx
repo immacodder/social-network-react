@@ -46,9 +46,9 @@ import { chat, GroupMessageRoom, MessageType, UserType } from "../types"
 import { Loader } from "./Loader"
 import { Formik, Form } from "formik"
 import { v4 } from "uuid"
-import { ImagePicker } from "../components/ImagePicker"
+import { ImagePickerAvatar } from "../components/ImagePickerAvatar"
 import { getDownloadURL, getStorage, ref, uploadBytes } from "@firebase/storage"
-import { GroupAvatar } from "../components/GroupAvatar"
+import { MessangerGroupAvatar } from "../components/MessangerGroupAvatar"
 
 const db = getFirestore(firebaseApp)
 const storage = getStorage(firebaseApp)
@@ -97,7 +97,7 @@ export function Messanger() {
 				chatImage = <UserAvatarFetch uid={friendId} />
 			} else {
 				chatName = room.title
-				chatImage = <GroupAvatar {...room} />
+				chatImage = <MessangerGroupAvatar {...room} />
 			}
 			const latestMessage = room.messages.sort(
 				(msgA, msgB) => msgB.createdAt - msgA.createdAt
@@ -195,7 +195,7 @@ export function Messanger() {
 	const fab = (
 		<Fab
 			sx={{ position: "absolute", right: "16px", bottom: "16px" }}
-			color="primary"
+			color="secondary"
 			onClick={() => setDialogOpen(true)}
 		>
 			<Icon>add</Icon>
@@ -233,7 +233,7 @@ export function Messanger() {
 								minRows={2}
 								fullWidth
 							/>
-							<ImagePicker
+							<ImagePickerAvatar
 								title="Pick a group image"
 								widthAndHeight={60}
 								inputRef={imageInputRef}

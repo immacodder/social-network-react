@@ -7,6 +7,7 @@ export interface PostType {
 	imageUrls: string[]
 	likedBy: string[]
 	dislikedBy: string[]
+	groupId?: string
 }
 
 export interface CommentType {
@@ -96,3 +97,32 @@ export interface HeaderStateType {
 }
 
 export type chat = GroupMessageRoom | DialogMessageRoom
+
+export interface Group {
+	title: string
+	coverImage: string | null
+	profileImage: string | null
+	createdAt: number
+	description: string
+	id: string
+	members: string[]
+	owner: string
+}
+
+interface AlertBase {
+	shown: boolean
+	severity: "error" | "warning" | "info" | "success"
+}
+
+export interface AlertWithDescription extends AlertBase {
+	readonly type: "withDescription"
+	title: string
+	description: string
+}
+
+export interface AlertStandard extends AlertBase {
+	readonly type: "standard"
+	message: string
+}
+
+export type AlertUnion = AlertWithDescription | AlertStandard

@@ -1,31 +1,16 @@
 import { LocalizationProvider } from "@mui/lab"
 import AdapterDateFns from "@mui/lab/AdapterDateFns"
 import { SignWrapper } from "./views/Sign"
-import {
-	BrowserRouter as Router,
-	Switch,
-	Route,
-	useLocation,
-} from "react-router-dom"
+import { Switch, Route, useLocation } from "react-router-dom"
 import { Home } from "./views/Home"
 import { AppBarComponent } from "./components/AppBar"
 import { SearchPage } from "./views/SearchPage"
 import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "./hooks"
-import { CommentType, PostType, UserType } from "./types"
-import { setPost } from "./slices/postsSlice"
-import { setComment } from "./slices/commentsSlice"
-import { addUser } from "./slices/usersSlice"
-import { addUserUid } from "./slices/userListSlice"
+import { UserType } from "./types"
 import { UserPage } from "./views/UserPage"
 import { UserSettings } from "./views/UserSettings"
-import {
-	getFirestore,
-	getDoc,
-	doc,
-	collection,
-	onSnapshot,
-} from "firebase/firestore"
+import { getFirestore, doc, onSnapshot } from "firebase/firestore"
 import { firebaseApp } from "./firebase"
 import { Chat } from "./views/Chat"
 import { Friends } from "./views/FriendsList"
@@ -33,14 +18,14 @@ import { Messanger } from "./views/Messanger"
 // for testing purposes
 import "./testFirbastore"
 import { setUser } from "./slices/userSlice"
+import { GroupPage } from "./views/GroupPage"
+import { Groups } from "./views/Groups"
 
 const db = getFirestore(firebaseApp)
 
 export function App() {
 	const dispatch = useAppDispatch()
 	const [isAppbarShown, setIsAppbarShown] = useState(false)
-	const userList = useAppSelector((s) => s.userList)
-	const users = useAppSelector((s) => s.users)
 	const currentUser = useAppSelector((s) => s.user.userState as UserType)
 	const { pathname } = useLocation()
 
@@ -60,52 +45,17 @@ export function App() {
 		return unsub
 	}, [currentUser.uid, dispatch])
 
-	useEffect(() => {
-		const promises = userList.map(async (uid) => {
-			const userFindResult = users.find((v) => v.uid === uid)
-			if (userFindResult) return
-			const userRef = doc(db, `users/${uid}`)
-			const result = await getDoc(userRef)
-			return result.data() as UserType
-		})
-
-		Promise.all(promises).then((usersArr) => {
-			usersArr.forEach((user) => {
-				if (!user) return
-				dispatch(addUser(user))
-			})
-		})
-	}, [userList, users, dispatch])
-
-	useEffect(() => {
-		const unsubList: Array<() => void> = []
-
-		const unsub2 = onSnapshot(collection(db, `posts`), (posts) => {
-			posts.docs.forEach((post) => {
-				const postData = post.data() as PostType
-				if (!users.find((v) => v.uid === postData.authorUid)) {
-					dispatch(addUserUid(postData.authorUid))
-				}
-
-				dispatch(setPost(postData))
-			})
-		})
-
-		const unsub3 = onSnapshot(collection(db, `comments`), (comments) => {
-			comments.forEach((comment) => {
-				dispatch(setComment(comment.data() as CommentType))
-			})
-		})
-
-		unsubList.push(unsub2, unsub3)
-
-		return () => unsubList.forEach((v) => v())
-	}, [dispatch, users])
-
 	return (
 		<LocalizationProvider dateAdapter={AdapterDateFns}>
 			{isAppbarShown && <AppBarComponent />}
 			<Switch>
+				<Route path="/groups">
+					<Groups />
+				</Route>
+				<Route
+					path="/group/:id"
+					render={({ match }) => <GroupPage groupId={match.params.id} />}
+				/>
 				<Route
 					path="/messanger/:messageRoomId"
 					exact

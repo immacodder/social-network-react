@@ -9,35 +9,50 @@ import {
 	ImageList,
 	ImageListItem,
 	Stack,
-} from '@mui/material'
-import React, { useRef, useState } from 'react'
-import { readAsDataURL } from 'promise-file-reader'
-import { Form, Formik } from 'formik'
-import * as Yup from 'yup'
-import { useAppSelector } from '../hooks'
-import { Post } from '../components/Post'
-import { PostType, UserType } from '../types'
-import { v4 } from 'uuid'
-import { TextFieldValidate } from '../components/TextFieldValidate'
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { getFirestore, doc, setDoc } from 'firebase/firestore'
+} from "@mui/material"
+import React, { useEffect, useRef, useState } from "react"
+import { readAsDataURL } from "promise-file-reader"
+import { Form, Formik } from "formik"
+import * as Yup from "yup"
+import { useAppSelector } from "../hooks"
+import { Post } from "../components/Post"
+import type { PostType, UserType } from "../types"
+import { v4 } from "uuid"
+import { TextFieldValidate } from "../components/TextFieldValidate"
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import {
+	getFirestore,
+	doc,
+	setDoc,
+	collection,
+	onSnapshot,
+	query,
+} from "firebase/firestore"
 
 const storage = getStorage()
 const db = getFirestore()
 
 const initialValues = {
-	postTitle: '',
-	postBody: '',
+	postTitle: "",
+	postBody: "",
 }
 
 export function Home() {
-	const posts = useAppSelector((state) => state.posts)
+	const [posts, setPosts] = useState<PostType[]>([])
 	const [images, setImages] = useState<string[]>([])
 	const inputRef = useRef<HTMLInputElement>(null)
 	const currentUserUid = useAppSelector(
-		(state) => (state.user.userState as UserType).uid,
+		(state) => (state.user.userState as UserType).uid
 	)
 	const [isFormOpened, setIsFormOpened] = useState(false)
+
+	useEffect(
+		() =>
+			onSnapshot(query(collection(db, "posts")), (snapshot) => {
+				setPosts(snapshot.docs.map((doc) => doc.data() as PostType))
+			}),
+		[]
+	)
 
 	async function onInputChange() {
 		const fileList = Array.from(inputRef?.current?.files as FileList)
@@ -67,7 +82,7 @@ export function Home() {
 			if (!fileList.length) return []
 			/// FUCK YOU FUCK YOU FUCK YOU FUCK YOU I HATE MY LIFE WHY DOES THIS NOT WORKKK
 			const resolveArr: Promise<string>[] = fileList.map(async (image) => {
-				const refPath = `postImages/${v4()}.${image.name.split('.').pop()}`
+				const refPath = `postImages/${v4()}.${image.name.split(".").pop()}`
 				const postImageRef = ref(storage, refPath)
 				await uploadBytes(postImageRef, image)
 				return getDownloadURL(postImageRef)
@@ -75,9 +90,9 @@ export function Home() {
 
 			async function resolveSequantially() {
 				const tempArr: string[] = []
-				console.log('is this even running?')
+				console.log("is this even running?")
 				for (let i = 0; i < resolveArr.length; i++) {
-					console.log('???')
+					console.log("???")
 					const result = await resolveArr[i]
 					console.log(result)
 					tempArr.push(result)
@@ -99,7 +114,7 @@ export function Home() {
 		setTimeout(() => {
 			const ref = inputRef.current as HTMLInputElement
 			formReset()
-			ref.value = ''
+			ref.value = ""
 			setImages([])
 			setIsFormOpened(false)
 		}, 0)
@@ -126,7 +141,7 @@ export function Home() {
 												name="postTitle"
 												variant="outlined"
 												fullWidth
-												label={isFormOpened ? 'Post Title' : 'Add a new post'}
+												label={isFormOpened ? "Post Title" : "Add a new post"}
 											/>
 											{isFormOpened && (
 												<TextFieldValidate
@@ -145,7 +160,7 @@ export function Home() {
 												<ImageList
 													cols={2}
 													gap={4}
-													sx={{ width: '100%', maxHeight: 300 }}
+													sx={{ width: "100%", maxHeight: 300 }}
 													rowHeight={200}
 												>
 													{images.map((v, i) => (
@@ -153,8 +168,8 @@ export function Home() {
 															<img
 																style={{
 																	backgroundImage: `url(${v})`,
-																	backgroundPosition: 'center',
-																	backgroundSize: 'cover',
+																	backgroundPosition: "center",
+																	backgroundSize: "cover",
 																}}
 															></img>
 														</ImageListItem>
@@ -176,7 +191,7 @@ export function Home() {
 													type="file"
 													multiple
 													accept="image/*"
-													style={{ display: 'none' }}
+													style={{ display: "none" }}
 													id="imagePicker"
 												/>
 											</label>
@@ -186,7 +201,8 @@ export function Home() {
 											>
 												Post
 											</Button>
-											<Box sx={{ ml: 'auto' }}>
+
+											<Box sx={{ ml: "auto" }}>
 												<Button
 													color="error"
 													onClick={() => closePostForm(formik.resetForm)}

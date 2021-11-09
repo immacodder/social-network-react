@@ -12,7 +12,7 @@ import {
 import { DatePicker } from "@mui/lab"
 import { Form, Formik } from "formik"
 import { useRef, useState } from "react"
-import { ImagePicker } from "../components/ImagePicker"
+import { ImagePickerAvatar } from "../components/ImagePickerAvatar"
 import { TextFieldValidate } from "../components/TextFieldValidate"
 import * as yup from "yup"
 import { useAppSelector } from "../hooks"
@@ -106,9 +106,9 @@ export function UserSettings() {
 										value={date}
 										onChange={(date) => setDate(date!)}
 									/>
-									<ImagePicker
+									<ImagePickerAvatar
 										inputRef={inputRef}
-										src={user.profileImage ?? undefined}
+										initialImage={user.profileImage ?? undefined}
 										title={"Pick a profile image"}
 										onChange={() => setIsImageTouched(true)}
 									/>

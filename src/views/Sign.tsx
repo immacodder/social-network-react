@@ -17,7 +17,7 @@ import { DatePicker } from "@mui/lab"
 import { useHistory } from "react-router-dom"
 import React, { useEffect, useRef, useState } from "react"
 import { UserType } from "../types"
-import { ImagePicker } from "../components/ImagePicker"
+import { ImagePickerAvatar } from "../components/ImagePickerAvatar"
 import { putProfileImageInStorage } from "../sharedFunctions"
 import { firebaseApp } from "../firebase"
 import {
@@ -30,7 +30,7 @@ import {
 	GoogleAuthProvider,
 } from "firebase/auth"
 import { getFirestore, doc, setDoc } from "firebase/firestore"
-import { ReactComponent as GoogleIcon } from "../Icons/google.svg"
+import GoogleSvg from "../Icons/google.svg"
 
 const auth = getAuth(firebaseApp)
 const db = getFirestore(firebaseApp)
@@ -198,9 +198,9 @@ function Sign({
 										value={date}
 										onChange={(date) => setDate(date!)}
 									/>
-									<ImagePicker
+									<ImagePickerAvatar
 										title="Pick a profile image"
-										src={userFromProvider?.photoURL ?? undefined}
+										initialImage={userFromProvider?.photoURL ?? undefined}
 										inputRef={inputRef}
 									/>
 									<TextFieldValidate
@@ -245,7 +245,7 @@ function Sign({
 						>
 							{term} with Google{" "}
 							<SvgIcon sx={{ ml: 1 }}>
-								<GoogleIcon />
+								<img src={GoogleSvg} />
 							</SvgIcon>
 						</Button>
 						<Button variant="outlined" fullWidth sx={{ mb: 2 }}>

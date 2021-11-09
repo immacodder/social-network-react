@@ -5,8 +5,8 @@ import {
 	Select,
 	Stack,
 	TextField,
+	InputLabel,
 } from "@mui/material"
-import { InputLabel } from "@mui/material"
 import React, { useEffect, useState } from "react"
 import { MeiliSearch } from "meilisearch"
 import { PostType, UserType } from "../types"

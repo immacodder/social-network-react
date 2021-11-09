@@ -32,7 +32,6 @@ import {
 	collection,
 	deleteDoc,
 	doc,
-	getDocs,
 	getFirestore,
 	onSnapshot,
 	query,
@@ -279,6 +278,18 @@ export function AppBarComponent() {
 									to="/friends"
 								>
 									Friends
+								</Link>
+							</MenuItem>
+							<MenuItem onClick={() => setIsUserMenuOpen(false)}>
+								<ListItemIcon>
+									<Icon>groups</Icon>
+								</ListItemIcon>
+								<Link
+									sx={{ textDecoration: "none", color: "text.primary" }}
+									component={RouterLink}
+									to="/groups"
+								>
+									Groups
 								</Link>
 							</MenuItem>
 							<MenuItem onClick={() => setIsUserMenuOpen(false)} divider>

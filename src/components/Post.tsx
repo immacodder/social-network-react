@@ -19,7 +19,7 @@ import {
 import { Form, Formik } from "formik"
 import { Comment } from "./Comment"
 import { TextFieldValidate } from "./TextFieldValidate"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CommentType, PostType, UserType } from "../types"
 import { v4 } from "uuid"
 import { useAppSelector } from "../hooks"
@@ -32,6 +32,10 @@ import {
 	arrayRemove,
 	arrayUnion,
 	setDoc,
+	onSnapshot,
+	query,
+	where,
+	collection,
 } from "firebase/firestore"
 import { useUserById } from "../hooks/useUserById"
 
@@ -45,8 +49,17 @@ export function Post(p: Props) {
 	const [isCommenting, setIsCommenting] = useState(false)
 	const currentUser = useAppSelector((s) => s.user.userState as UserType)
 	const postUser = useUserById(p.authorUid)
-	const comments = useAppSelector((state) => state.comments)
-	const commentList = comments.filter((v) => v.parentPostUid === p.uid)
+	const [comments, setComments] = useState<CommentType[]>([])
+
+	useEffect(() => {
+		const q = query(
+			collection(db, "comments"),
+			where("parentPostUid", "==", p.uid)
+		)
+		onSnapshot(q, (snap) => {
+			setComments(snap.docs.map((doc) => doc.data() as CommentType))
+		})
+	}, [p.uid])
 
 	function onLike(isLike: boolean = true) {
 		const property = isLike ? "likedBy" : "dislikedBy"
@@ -168,7 +181,7 @@ export function Post(p: Props) {
 				>
 					{(formik) => (
 						<Form>
-							{commentList.map((v) => (
+							{comments.map((v) => (
 								<Comment
 									onReplyClick={(user) => {
 										setTimeout(() =>

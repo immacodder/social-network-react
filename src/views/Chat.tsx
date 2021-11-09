@@ -9,7 +9,7 @@ import { useAppSelector } from "../hooks"
 import { DialogMessageRoom, MessageType, UserType, chat } from "../types"
 import { Loader } from "./Loader"
 import { onSnapshot, updateDoc, arrayUnion } from "firebase/firestore"
-import { GroupAvatar } from "../components/GroupAvatar"
+import { MessangerGroupAvatar } from "../components/MessangerGroupAvatar"
 
 const db = getFirestore(firebaseApp)
 
@@ -32,6 +32,22 @@ export function Chat({ messangerRoomId }: Props) {
 	const [companion, setCompanion] = useState<null | UserType>(null)
 	const [chatInfo, setChatInfo] = useState<null | chat>(null)
 	const [companionId, setCompanionId] = useState<string>("")
+
+	useEffect(() => {
+		if (!chatInfo || !chatInfo.messages.length) return
+		const pixelsFromBottom =
+			scrollHeight - (scrollY + document.documentElement.clientHeight)
+		console.log(pixelsFromBottom)
+
+		const messageCreatedByCurrentUser =
+			chatInfo.messages.sort((m1, m2) => m2.createdAt - m1.createdAt)[0]
+				.createdBy === currentUser.uid
+
+		if (pixelsFromBottom <= 100 || messageCreatedByCurrentUser) {
+			// make sure that I only scroll after message has been rendered
+			setTimeout(() => scrollBy(0, 1e9), 50)
+		}
+	}, [chatInfo, currentUser.uid])
 
 	useEffect(() => {
 		const unsub = onSnapshot(
@@ -85,12 +101,13 @@ export function Chat({ messangerRoomId }: Props) {
 		chatPicture = <UserAvatarFetch uid={companion!.uid} />
 		chatName = companion?.firstName + " " + companion?.secondName
 	} else {
-		chatPicture = <GroupAvatar {...chatInfo} />
+		chatPicture = <MessangerGroupAvatar {...chatInfo} />
 		chatName = chatInfo.title
 	}
 
 	return (
 		<>
+			{/* <button onClick={()=>useScrol}></button> */}
 			<AppBar position="sticky">
 				<Container sx={{ py: 1 }}>
 					<Stack
